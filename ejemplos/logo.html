@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuestros Socios - Demostración de Errores de Accesibilidad</title>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; margin: 0; padding: 20px; }
+
+        /* Estilos para el Skip Link */
+        .skip-link { position: absolute; top: -100px; left: 0; background: #333; color: white; padding: 10px; z-index: 100; text-decoration: none; }
+        .skip-link:focus { top: 0; }
+
+        header { border-bottom: 1px solid #ccc; padding: 10px 0; margin-bottom: 20px; }
+
+        /* Estilo para el logo en el header */
+        .logo-link img { width: 150px; height: auto; }
+
+        /* Contenedor de socios */
+        .socios-grid { display: flex; gap: 40px; align-items: center; margin-top: 20px; }
+
+        /* Estilo para el segundo socio (Imagen de fondo) */
+        .socio-bg {
+            width: 100px;
+            height: 100px;
+            background-image: url('img/socio-2.avif');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            border: 1px solid #eee;
+        }
+
+        .socio-img { width: 100px; height: auto; }
+        svg { width: 100px; height: auto; }
+
+        footer { margin-top: 50px; border-top: 1px solid #eee; padding-top: 10px; }
+    </style>
+</head>
+<body>
+
+    <a href="#contenido-principal" class="skip-link">Saltar al contenido principal</a>
+
+    <header>
+        <!-- Enlace sin nombre + imagen sin el atributo alt -->
+        <a href="index.html" class="logo-link">
+            <img src="img/logo-principal.jpg">
+        </a>
+    </header>
+
+    <main id="contenido-principal">
+        <h1>Nuestros Socios</h1>
+
+        <div class="socios-grid">
+            <!-- atributo alt vacio -->
+            <img src="img/socio-1.png" alt="" class="socio-img">
+            <!-- imagen como fondo -->
+            <div class="socio-bg"></div>
+             <!-- imagen como svg sin title -->
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="50" r="40" fill="navy" />
+                <rect x="30" y="30" width="40" height="40" fill="white" />
+            </svg>
+        </div>
+    </main>
+
+</body>
+</html>
