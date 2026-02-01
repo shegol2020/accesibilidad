@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demostración: Tarjetas Accesibles con Button</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; line-height: 1.6; padding: 20px; background-color: #f9f9f9; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .card { background: white; border: 1px solid #ddd; padding: 20px; border-radius: 8px; position: relative; transition: transform 0.2s; }
+
+        .card:hover { transform: translateY(-5px); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+
+        h2 { margin-top: 0; color: #333; }
+
+        /* Clase para ocultar texto visualmente pero mantenerlo para lectores de pantalla */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+        .btn-personalizado {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #0630d6;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .card-mejorada .main-action::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        .error-tag { color: #c13531; font-weight: bold; display: block; margin-bottom: 10px; }
+        .exito-tag { color: #1a5319; font-weight: bold; display: block; margin-bottom: 10px; }
+
+
+    </style>
+</head>
+<body>
+
+    <h1>Tarjetas de Noticias</h1>
+
+    <div class="grid">
+        <div class="card">
+            <span class="error-tag">Mal ejemplo (Todo envuelto en enlace)</span>
+            <a href="noticia.html" style="text-decoration: none; color: inherit;">
+                <h2>Crisis en el Ártico</h2>
+                <p>El deshielo alcanza niveles récord este verano, afectando a la fauna local y al clima global.</p>
+                <button class="btn-personalizado">Leer más</button>
+            </a>
+        </div>
+
+        <div class="card card-mejorada">
+            <span class="exito-tag">Buen ejemplo (Área de clic extendida)</span>
+            <h2>Nuevas Tecnologías Médicas</h2>
+            <p>Descubren un método para regenerar tejidos mediante bioimpresión en 3D con células madre.</p>
+
+       <button class="btn-personalizado main-action" onclick="window.location.href='noticia.html'">
+        Leer más <span class="sr-only">sobre las nuevas tecnologías médicas</span>
+    </button>
+        </div>
+    </div>
+
+<section style="margin-top: 40px; background: #fff; padding: 20px; border-radius: 8px;">
+    <h3>Comentarios Técnicos:</h3>
+    <ul>
+        <li><strong>Problema del primer ejemplo:</strong> El lector de pantalla dirá: <i>"Enlace, Crisis en el Ártico El deshielo alcanza niveles récord este verano, afectando a la fauna local y al clima global. Leer más"</i>. Es demasiada información para un solo enlace. Además la estructura es inválida, ya que no se debe anidar un <code>&lt;button&gt;</code> dentro de un enlace <code>&lt;a&gt;</code>.</li>
+        <li><strong>Ventaja del segundo ejemplo:</strong> Se utiliza un área de clic extendida mediante CSS para facilitar la interacción. Además, el uso de la clase <code>.sr-only</code> proporciona un "nombre accesible" completo para los lectores de pantalla (<i>"Leer más sobre las nuevas tecnologías médicas"</i>).</li>
+    </ul>
+</section>
