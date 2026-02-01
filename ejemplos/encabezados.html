@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demostración de Errores de Jerarquía y Encabezados</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; line-height: 1.6; padding: 20px; max-width: 900px; margin: 0 auto; }
+
+        /* Estilos para simular encabezados sin usar etiquetas h */
+        .titulo-falso-grande { font-size: 2.5rem; font-weight: bold; display: block; margin-bottom: 20px; }
+
+        /* Estilos generales */
+        .seccion { margin-bottom: 40px; border-bottom: 1px solid #eee; padding-bottom: 20px; }
+        .skip-link { position: absolute; top: -100px; left: 10px; background: #000; color: #fff; padding: 10px; z-index: 100; text-decoration: none; }
+        .skip-link:focus { top: 0; }
+
+        h1, h2, h3 { color: #2c3e50; }
+        blockquote { font-style: italic; color: #555; border-left: 5px solid #ccc; padding-left: 15px; }
+    </style>
+</head>
+<body>
+
+    <a href="#contenido-principal" class="skip-link">Saltar al contenido principal</a>
+
+    <main id="contenido-principal">
+
+        <span class="titulo-falso-grande">Bienvenidos a la Auditoría de Estructura</span>
+
+        <section class="seccion">
+            <h2>Sección de Información Correcta</h2>
+            <p>Este es un párrafo de ejemplo bajo un H2 correcto.</p>
+            <h3>Subsección de detalles</h3>
+            <p>Información detallada bajo un H3 que sigue el orden lógico.</p>
+        </section>
+
+        <section class="seccion">
+            <h4>"El diseño no es solo lo que ves, sino cómo funciona." - Steve Jobs</h4>
+        </section>
+
+        <section class="seccion">
+            <h2>Nuestros Servicios de Consultoría</h2>
+            <h2>Análisis de Accesibilidad Web</h2>
+            <p>Este segundo H2 debería ser un H3, ya que es un servicio específico dentro de la consultoría.</p>
+        </section>
+
+        <section class="seccion">
+            <strong>Contacto y Soporte Técnico</strong>
+            <p>Aunque el texto está en negrita, los motores de búsqueda y lectores de pantalla no lo tratarán como un encabezado.</p>
+        </section>
+
+        <section class="seccion">
+            <h2>Saber más sobre</h2>
+            <ul>
+                <li><a href="#">Nuestra historia</a></li>
+                <li><a href="#">Misión y Visión</a></li>
+                <li><a href="#">El equipo</a></li>
+            </ul>
+
+            <h2>Ir a</h2>
+            <ul>
+                <li><a href="#">Panel de usuario</a></li>
+                <li><a href="#">Configuración de cuenta</a></li>
+                <li><a href="#">Cerrar sesión</a></li>
+            </ul>
+        </section>
+
+    </main>
+</body>
+</html>

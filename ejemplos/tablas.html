@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demostración de Accesibilidad: Tablas con y sin TH</title>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; padding: 20px; max-width: 800px; margin: 0 auto; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 40px; }
+        th, td { border: 1px solid #ccc; padding: 12px; text-align: left; }
+
+        /* Estilo visual para diferenciar las tablas */
+        .tabla-correcta th { font-weight: bold; }
+        .titulo-error { color: #d9534f; font-weight: bold; }
+        .titulo-exito { color: #6c9b6c; font-weight: bold; }
+
+        .skip-link { position: absolute; top: -100px; left: 10px; background: #000; color: #fff; padding: 10px; z-index: 100; text-decoration: none; }
+        .skip-link:focus { top: 0; }
+    </style>
+</head>
+<body>
+
+    <a href="#contenido-principal" class="skip-link">Saltar al contenido principal</a>
+
+    <main id="contenido-principal">
+        <h1>Comparativa de Accesibilidad en Tablas</h1>
+
+        <section>
+            <h2 class="titulo-exito">1. Tabla Accesible (Uso de &lt;th&gt; y &lt;caption&gt;)</h2>
+            <p>Esta tabla permite que los lectores de pantalla anuncien el encabezado correspondiente a cada celda de datos.</p>
+
+            <table class="tabla-correcta">
+                <caption>Horario de clases de idiomas</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Idioma</th>
+                        <th scope="col">Nivel</th>
+                        <th scope="col">Horario</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Español</td>
+                        <td>Básico</td>
+                        <td>Lunes 10:00</td>
+                    </tr>
+                    <tr>
+                        <td>Inglés</td>
+                        <td>Intermedio</td>
+                        <td>Martes 11:00</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section>
+            <h2 class="titulo-error">2. Tabla Inaccesible (Sin &lt;th&gt;, solo &lt;td&gt;)</h2>
+            <p>Visualmente parece una tabla, pero para un lector de pantalla, la primera fila es solo texto aleatorio sin relación con los datos de abajo.</p>
+
+            <table>
+                                <caption>Horario de clases de idiomas</caption>
+                <tbody>
+                    <tr>
+                        <td><strong>Idioma</strong></td>
+                        <td><strong>Nivel</strong></td>
+                        <td><strong>Horario</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Alemán</td>
+                        <td>Avanzado</td>
+                        <td>Miércoles 09:00</td>
+                    </tr>
+                    <tr>
+                        <td>Francés</td>
+                        <td>Básico</td>
+                        <td>Jueves 14:00</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+    </main>
+
+</body>
+</html>
