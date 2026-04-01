@@ -49,6 +49,46 @@
      data-href="https://example.com">Fake link
   </div>
 
+
+<section>
+  <h2>1. Screen Reader Behavior</h2>
+
+  <p>
+    The real link will be read as a “visited link” if the URL has been visited before. 
+    Screen readers rely on the native HTML <code>&lt;a&gt;</code> element and the browser’s visited‑state.
+  </p>
+
+  <p>
+    The custom link (<code>&lt;div role="link"&gt;</code>) will be read simply as “link”, 
+    but never as “visited”, because:
+  </p>
+
+  <ul>
+    <li>It has no <code>href</code></li>
+    <li>Browsers do not apply the <code>:visited</code> state to non‑link elements</li>
+    <li>Screen readers only announce visited‑state for real HTML anchors</li>
+  </ul>
+</section>
+
+<section>
+  <h2>2. Is This a WCAG Violation?</h2>
+
+  <p>You asked whether the lack of “visited” state is an accessibility violation. I explained that:</p>
+
+  <p><strong>No, this is not a WCAG violation.</strong></p>
+
+  <p>WCAG does not require:</p>
+
+  <ul>
+    <li>that visited links be visually distinguished</li>
+    <li>that screen readers announce visited‑state</li>
+    <li>that custom ARIA links mimic the full behavior of real <code>&lt;a&gt;</code> elements</li>
+  </ul>
+
+  <p>
+
+
+
   <script>
   const fakeLink = document.querySelector('.fake-link');
 
