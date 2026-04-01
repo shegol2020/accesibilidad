@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Link vs. ARIA Link Demo</title>
+
+<style>
+  body {
+    font-family: sans-serif;
+    padding: 30px;
+    line-height: 1.6;
+  }
+
+  .fake-link, a.real-link {
+    display: inline-block;
+    margin-bottom: 20px;
+    color: #0645ad;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 18px;
+  }
+
+  /* Focus outline for accessibility */
+  .fake-link:focus,
+  a.real-link:focus {
+    outline: 3px solid #ff9800;
+    outline-offset: 3px;
+  }
+</style>
+
+</head>
+<body>
+
+<h1>Link vs. ARIA Link Demo</h1>
+
+<p>Both items below look the same. The first is a real link; the second is a div with <code>role="link"</code>.</p>
+
+<!-- REAL LINK -->
+<a class="real-link" href="https://example.com" target="_blank">
+  Real Link (HTML &lt;a&gt;)
+</a>
+
+<br>
+
+<!-- FAKE LINK -->
+<div class="fake-link"
+     role="link"
+     tabindex="0"
+     data-href="https://examplele
+  const fakeLink = document.querySelector('.fake-link');
+
+  fakeLink.addEventListener('click', (e) => {
+    const url = e.target.getAttribute('data-href');
+    window.open(url, '_blank');
+  });
+
+  fakeLink.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      const url = e.target.getAttribute('data-href');
+      window.open(url, '_blank');
+    }
+  });
+</script>
+
+</body>
+</html>
