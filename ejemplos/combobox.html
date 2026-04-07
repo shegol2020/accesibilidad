@@ -58,31 +58,22 @@
 
   <form>
     <div class="field-wrapper">
-
-      <!-- ISSUE 1: label is empty — screen reader will announce nothing -->
       <label
         id="mat-mdc-form-field-label-0"
         for="mat-input-0">Test 1
       </label>
 
-      <!-- ISSUE 2: aria-required="false" is redundant -->
-      <!-- ISSUE 3: aria-invalid="false" is redundant -->
-      <!-- ISSUE 4: role="combobox" is missing aria-controls and aria-activedescendant -->
-      <!-- ISSUE 5: autocomplete="off" hinders users with motor impairments -->
-      <!-- ISSUE 6: no aria-describedby for error messages -->
+      <!-- ISSUE: role="combobox" is missing aria-controls and aria-activedescendant -->
       <input
         type="text"
         id="mat-input-0"
         name="customerId"
-        aria-required="false"
-        aria-invalid="false"
-        autocomplete="off"
         role="combobox"
         aria-autocomplete="list"
         aria-expanded="true"
         aria-haspopup="listbox"
       />
-      <ul role="listbox" id="customer-listbox-bad">
+      <ul role="listbox" id="customer-listbox-bad" aria-label="Customers list">
   <li role="option" id="bad-option-1">Customer 1</li>
   <li role="option" id="bad-option-2">Customer 2</li>
   <li role="option" id="bad-option-3">Customer 3</li>
