@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Accessibility Issues Example</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    .field-wrapper {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    input {
+      padding: 8px;
+      font-size: 16px;
+      width: 300px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    ul[role="listbox"] {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      border: 1px solid #ccc;
+      width: 300px;
+    }
+
+    ul[role="listbox"] li {
+      padding: 8px;
+      cursor: pointer;
+    }
+
+    ul[role="listbox"] li:hover {
+      background-color: #f0f0f0;
+    }
+
+    .error {
+      color: red;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Accessibility Issues Example</h1>
+
+  <h2>Version with Issues</h2>
+
+  <form>
+    <div class="field-wrapper">
+
+      <!-- ISSUE 1: label is empty — screen reader will announce nothing -->
+      <label
+        id="mat-mdc-form-field-label-0"
+        for="mat-input-0">
+      </label>
+
+      <!-- ISSUE 2: aria-required="false" is redundant -->
+      <!-- ISSUE 3: aria-invalid="false" is redundant -->
+      <!-- ISSUE 4: role="combobox" is missing aria-controls and aria-activedescendant -->
+      <!-- ISSUE 5: autocomplete="off" hinders users with motor impairments -->
+      <!-- ISSUE 6: no aria-describedby for error messages -->
+      <input
+        type="text"
+        id="mat-input-0"
+        name="customerI
