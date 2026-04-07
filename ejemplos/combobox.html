@@ -73,4 +73,77 @@
       <input
         type="text"
         id="mat-input-0"
-        name="customerI
+        name="customerId"
+        aria-required="false"
+        aria-invalid="false"
+        autocomplete="off"
+        role="combobox"
+        aria-autocomplete="list"
+        aria-expanded="false"
+        aria-haspopup="listbox"
+      />
+
+    </div>
+  </form>
+
+  <hr>
+
+  <h2>Fixed Version</h2>
+
+  <form>
+    <div class="field-wrapper">
+
+      <!-- FIX 1: label has a visible text -->
+      <label for="customer-input">
+        Customer ID
+      </label>
+
+      <input
+        type="text"
+        id="customer-input"
+        name="customerId"
+
+        role="combobox"
+        aria-autocomplete="list"
+        aria-expanded="false"
+        aria-haspopup="listbox"
+
+        <!-- FIX 2: removed redundant aria-required="false" -->
+        <!-- FIX 3: removed redundant aria-invalid="false" -->
+
+        <!-- FIX 4: added aria-controls and aria-activedescendant -->
+        aria-controls="customer-listbox"
+        aria-activedescendant=""
+
+        <!-- FIX 5: autocomplete enabled -->
+        autocomplete="on"
+
+        <!-- FIX 6: aria-describedby links to error message -->
+        aria-describedby="customer-error"
+      />
+
+      <!-- Listbox for dropdown options -->
+      <ul
+        id="customer-listbox"
+        role="listbox"
+        aria-label="Customer options"
+        hidden>
+        <li role="option" id="option-1">Customer 1</li>
+        <li role="option" id="option-2">Customer 2</li>
+      </ul>
+
+      <!-- Error message container -->
+      <span
+        id="customer-error"
+        role="alert"
+        aria-live="polite"
+        class="error"
+        style="display: none;">
+        Please select a customer
+      </span>
+
+    </div>
+  </form>
+
+</body>
+</html>
