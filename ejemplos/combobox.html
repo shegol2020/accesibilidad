@@ -102,23 +102,13 @@
         type="text"
         id="customer-input"
         name="customerId"
-
         role="combobox"
         aria-autocomplete="list"
         aria-expanded="false"
         aria-haspopup="listbox"
-
-        <!-- FIX 2: removed redundant aria-required="false" -->
-        <!-- FIX 3: removed redundant aria-invalid="false" -->
-
-        <!-- FIX 4: added aria-controls and aria-activedescendant -->
         aria-controls="customer-listbox"
         aria-activedescendant=""
-
-        <!-- FIX 5: autocomplete enabled -->
         autocomplete="on"
-
-        <!-- FIX 6: aria-describedby links to error message -->
         aria-describedby="customer-error"
       />
 
