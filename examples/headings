@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hierarchy and Heading Errors Demo</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; line-height: 1.6; padding: 20px; max-width: 900px; margin: 0 auto; }
+
+        /* Styles to simulate headings without using h tags */
+        .fake-big-title { font-size: 2.5rem; font-weight: bold; display: block; margin-bottom: 20px; }
+
+        /* General styles */
+        .section { margin-bottom: 40px; border-bottom: 1px solid #eee; padding-bottom: 20px; }
+        .skip-link { position: absolute; top: -100px; left: 10px; background: #000; color: #fff; padding: 10px; z-index: 100; text-decoration: none; }
+        .skip-link:focus { top: 0; }
+
+        h1, h2, h3 { color: #2c3e50; }
+        blockquote { font-style: italic; color: #555; border-left: 5px solid #ccc; padding-left: 15px; }
+    </style>
+</head>
+<body>
+
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <main id="main-content">
+
+        <span class="fake-big-title">Welcome to the Structure Audit</span>
+
+        <section class="section">
+            <h2>Correct Information Section</h2>
+            <p>This is an example paragraph under a correct H2.</p>
+            <h3>Details Subsection</h3>
+            <p>Detailed information under an H3 that follows logical order.</p>
+        </section>
+
+        <section class="section">
+            <h4>"Design is not just what it looks like and feels like. Design is how it works." – Steve Jobs</h4>
+        </section>
+
+        <section class="section">
+            <h2>Our Consulting Services</h2>
+            <h2>Web Accessibility Analysis</h2>
+            <p>This second H2 should be an H3, since it is a specific service within the consulting category.</p>
+        </section>
+
+        <section class="section">
+            <strong>Contact and Technical Support</strong>
+            <p>Although the text is bold, search engines and screen readers do not treat it as a heading.</p>
+        </section>
+
+        <section class="section">
+            <h2>Learn more about</h2>
+            <ul>
+                <li><a href="#">Our history</a></li>
+                <li><a href="#">Mission and Vision</a></li>
+                <li><a href="#">The team</a></li>
+            </ul>
+
+            <h2>Go to</h2>
+            <ul>
+                <li><a href="#">User dashboard</a></li>
+                <li><a href="#">Account settings</a></li>
+                <li><a href="#">Log out</a></li>
+            </ul>
+        </section>
+
+    </main>
+</body>
+</html>
