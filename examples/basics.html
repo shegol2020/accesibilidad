@@ -190,18 +190,17 @@
 </head>
 <body>
 
-  <header role="banner">
+  <header>
     <h1>My Accessible Page</h1>
     <nav aria-label="Main navigation">
       <ul>
-        <li><a href="#main">Skip to content</a></li>
         <li><a href="#about">About</a></li>
       </ul>
     </nav>
   </header>
 
-  <main id="main" role="main">
-    <section aria-labelledby="section-title">
+  <main id="main">
+    <section>
       <h2 id="section-title">Form Example</h2>
 
       <label for="email">Email address</label>
@@ -223,13 +222,12 @@
       <div class="avatar-row">
         <img src="https://i.pravatar.cc/96" alt="User profile photo">
         <span class="avatar-label">Signed in as <strong>demo@example.com</strong></span>
-        <img src="" alt="" role="presentation">
       </div>
 
       <div role="status" aria-live="polite" id="status-msg"></div>
     </section>
 
-    <section id="about" aria-label="About this demo">
+    <section id="about">
       <button aria-expanded="false" aria-controls="details-panel"
               onclick="const b=this,p=document.getElementById('details-panel'),e=b.getAttribute('aria-expanded')==='true';b.setAttribute('aria-expanded',!e);p.hidden=e;">
         What is an accessibility tree?
@@ -242,7 +240,7 @@
     </section>
   </main>
 
-  <footer role="contentinfo">
+  <footer>
     <p>© 2026 A11y Demo</p>
   </footer>
 
