@@ -3,6 +3,190 @@
 <head>
   <meta charset="UTF-8">
   <title>Accessibility Tree Demo</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, sans-serif;
+      background: #f5f5f5;
+      color: #1a1a1a;
+      line-height: 1.6;
+    }
+
+    /* Skip link — visible only on focus */
+    a[href="#main"] {
+      position: absolute;
+      top: -100%;
+      left: 1rem;
+      padding: 0.5rem 1rem;
+      background: #2563eb;
+      color: #fff;
+      border-radius: 0 0 6px 6px;
+      text-decoration: none;
+      transition: top 0.2s;
+    }
+    a[href="#main"]:focus { top: 0; }
+
+    header[role="banner"] {
+      background: #1e293b;
+      color: #f8fafc;
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header h1 { font-size: 1.4rem; font-weight: 700; }
+
+    nav ul { list-style: none; display: flex; gap: 1.5rem; }
+    nav a {
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+    nav a:hover, nav a:focus { color: #f8fafc; outline: 2px solid #60a5fa; outline-offset: 4px; border-radius: 3px; }
+
+    main {
+      max-width: 680px;
+      margin: 2.5rem auto;
+      padding: 0 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    section {
+      background: #fff;
+      border-radius: 12px;
+      padding: 1.75rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+
+    h2 { font-size: 1.1rem; margin-bottom: 1.25rem; color: #0f172a; }
+
+    label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.35rem;
+      color: #374151;
+    }
+
+    input[type="email"] {
+      width: 100%;
+      padding: 0.6rem 0.85rem;
+      border: 1.5px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    input[type="email"]:focus {
+      outline: none;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+    }
+
+    #email-hint {
+      display: block;
+      font-size: 0.78rem;
+      color: #6b7280;
+      margin-top: 0.4rem;
+    }
+
+    .form-row { display: flex; gap: 0.75rem; margin-top: 1rem; align-items: center; }
+
+    button[aria-label="Submit form"] {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1.25rem;
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button[aria-label="Submit form"]:hover { background: #1d4ed8; }
+    button[aria-label="Submit form"]:focus-visible {
+      outline: 3px solid #60a5fa;
+      outline-offset: 3px;
+    }
+
+    .avatar-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 1.25rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid #f1f5f9;
+    }
+    .avatar-row img[alt="User profile photo"] {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #e2e8f0;
+      border: 2px solid #cbd5e1;
+    }
+    .avatar-label { font-size: 0.85rem; color: #475569; }
+
+    #status-msg {
+      margin-top: 0.75rem;
+      min-height: 1.5rem;
+      font-size: 0.85rem;
+      color: #16a34a;
+      font-weight: 500;
+    }
+
+    /* Disclosure widget */
+    button[aria-expanded] {
+      width: 100%;
+      background: none;
+      border: none;
+      text-align: left;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #1e293b;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.25rem 0;
+    }
+    button[aria-expanded]::after {
+      content: "▸";
+      transition: transform 0.2s;
+      font-size: 0.8rem;
+      color: #94a3b8;
+    }
+    button[aria-expanded="true"]::after { transform: rotate(90deg); }
+    button[aria-expanded]:focus-visible {
+      outline: 2px solid #2563eb;
+      outline-offset: 3px;
+      border-radius: 4px;
+    }
+
+    #details-panel {
+      margin-top: 0.85rem;
+      padding: 1rem;
+      background: #f8fafc;
+      border-left: 3px solid #2563eb;
+      border-radius: 0 8px 8px 0;
+      font-size: 0.88rem;
+      color: #475569;
+    }
+    #details-panel[hidden] { display: none; }
+
+    footer[role="contentinfo"] {
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.8rem;
+      color: #9ca3af;
+    }
+  </style>
 </head>
 <body>
 
@@ -20,36 +204,40 @@
     <section aria-labelledby="section-title">
       <h2 id="section-title">Form Example</h2>
 
-      <!-- Labeled input — appears in a11y tree as "Email address, text field" -->
       <label for="email">Email address</label>
-      <input type="email" id="email" required aria-describedby="email-hint">
+      <input type="email" id="email" required aria-describedby="email-hint"
+             placeholder="you@example.com">
       <span id="email-hint">We'll never share your email.</span>
 
-      <!-- Icon button with accessible name via aria-label -->
-      <button aria-label="Submit form">
-        <svg aria-hidden="true" focusable="false"><!-- icon --></svg>
-      </button>
+      <div class="form-row">
+        <button aria-label="Submit form"
+                onclick="document.getElementById('status-msg').textContent = '✓ Submitted!'">
+          <svg aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 24 24"
+               fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+          </svg>
+          Submit
+        </button>
+      </div>
 
-      <!-- Image with meaningful alt text -->
-      <img src="avatar.png" alt="User profile photo">
+      <div class="avatar-row">
+        <img src="https://i.pravatar.cc/96" alt="User profile photo">
+        <span class="avatar-label">Signed in as <strong>demo@example.com</strong></span>
+        <img src="" alt="" role="presentation">
+      </div>
 
-      <!-- Decorative image hidden from a11y tree -->
-      <img src="divider.png" alt="" role="presentation">
-
-      <!-- Live region — announced to screen readers on change -->
       <div role="status" aria-live="polite" id="status-msg"></div>
     </section>
 
     <section id="about" aria-label="About this demo">
-      <!-- Expandable disclosure widget -->
-      <button aria-expanded="false" aria-controls="details-panel">
+      <button aria-expanded="false" aria-controls="details-panel"
+              onclick="const b=this,p=document.getElementById('details-panel'),e=b.getAttribute('aria-expanded')==='true';b.setAttribute('aria-expanded',!e);p.hidden=e;">
         What is an accessibility tree?
       </button>
       <div id="details-panel" hidden>
-        <p>
-          The accessibility tree is a subset of the DOM that browsers expose 
-          to assistive technologies like screen readers.
-        </p>
+        <p>The accessibility tree is a subset of the DOM that browsers expose
+           to assistive technologies like screen readers. Inspect it in
+           Chrome DevTools → Elements → <strong>Accessibility</strong> tab.</p>
       </div>
     </section>
   </main>
