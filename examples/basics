@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Accessibility Tree Demo</title>
+</head>
+<body>
+
+  <header role="banner">
+    <h1>My Accessible Page</h1>
+    <nav aria-label="Main navigation">
+      <ul>
+        <li><a href="#main">Skip to content</a></li>
+        <li><a href="#about">About</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main" role="main">
+    <section aria-labelledby="section-title">
+      <h2 id="section-title">Form Example</h2>
+
+      <!-- Labeled input — appears in a11y tree as "Email address, text field" -->
+      <label for="email">Email address</label>
+      <input type="email" id="email" required aria-describedby="email-hint">
+      <span id="email-hint">We'll never share your email.</span>
+
+      <!-- Icon button with accessible name via aria-label -->
+      <button aria-label="Submit form">
+        <svg aria-hidden="true" focusable="false"><!-- icon --></svg>
+      </button>
+
+      <!-- Image with meaningful alt text -->
+      <img src="avatar.png" alt="User profile photo">
+
+      <!-- Decorative image hidden from a11y tree -->
+      <img src="divider.png" alt="" role="presentation">
+
+      <!-- Live region — announced to screen readers on change -->
+      <div role="status" aria-live="polite" id="status-msg"></div>
+    </section>
+
+    <section id="about" aria-label="About this demo">
+      <!-- Expandable disclosure widget -->
+      <button aria-expanded="false" aria-controls="details-panel">
+        What is an accessibility tree?
+      </button>
+      <div id="details-panel" hidden>
+        <p>
+          The accessibility tree is a subset of the DOM that browsers expose 
+          to assistive technologies like screen readers.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer role="contentinfo">
+    <p>© 2026 A11y Demo</p>
+  </footer>
+
+</body>
+</html>
