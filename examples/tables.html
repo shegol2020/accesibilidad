@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Accessibility Demo: Tables with and without TH</title>
+  <style>
+    body { font-family: sans-serif; line-height: 1.6; padding: 20px; max-width: 800px; margin: 0 auto; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 40px; }
+    th, td { border: 1px solid #ccc; padding: 12px; text-align: left; }
+    .table-correct th { font-weight: bold; }
+    .title-error { color: #d9534f; font-weight: bold; }
+    .title-success { color: #6c9b6c; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+  <main id="main-content">
+    <h1>Accessibility Comparison in Tables</h1>
+
+    <section>
+      <h2 class="title-success">1. Accessible Table (Using &lt;th&gt;)</h2>
+      <p>This table allows screen readers to announce the corresponding header for each data cell.</p>
+      <table class="table-correct">
+        <caption>Language class schedule</caption>
+        <thead>
+          <tr>
+            <th scope="col">Language</th>
+            <th scope="col">Level</th>
+            <th scope="col">Schedule</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Spanish</td>
+            <td>Beginner</td>
+            <td>Monday 10:00</td>
+          </tr>
+          <tr>
+            <td>English</td>
+            <td>Intermediate</td>
+            <td>Tuesday 11:00</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2 class="title-error">2. Inaccessible Table (No &lt;th&gt;, only &lt;td&gt;)</h2>
+      <p>Visually it looks like a table, but for a screen reader the first row is just random text with no relation to the data below.</p>
+      <table>
+        <caption>Language class schedule</caption>
+        <tbody>
+          <tr>
+            <td><strong>Language</strong></td>
+            <td><strong>Level</strong></td>
+            <td><strong>Schedule</strong></td>
+          </tr>
+          <tr>
+            <td>German</td>
+            <td>Advanced</td>
+            <td>Wednesday 09:00</td>
+          </tr>
+          <tr>
+            <td>French</td>
+            <td>Beginner</td>
+            <td>Thursday 14:00</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>
