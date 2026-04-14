@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Accessibility Demo: Pagination</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: sans-serif;
+      line-height: 1.6;
+      background: #fff;
+      color: #111;
+    }
+
+    .page-body {
+      padding: 40px 32px;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 24px;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .page-intro {
+      font-size: 14px;
+      color: #444;
+      margin-bottom: 36px;
+      max-width: 600px;
+    }
+
+    /* ── ARTICLE LIST ── */
+    .articles {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin-bottom: 36px;
+    }
+
+    .article-item {
+      padding: 20px 0;
+      border-bottom: 0.5px solid #e8e8e8;
+    }
+
+    .article-item:first-child {
+      border-top: 0.5px solid #e8e8e8;
+    }
+
+    .article-meta {
+      font-size: 11px;
+      color: #aaa;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .article-title {
+      font-size: 16px;
+      font-weight: 500;
+      color: #111;
+      margin-bottom: 4px;
+    }
+
+    .article-excerpt {
+      font-size: 13px;
+      color: #666;
+    }
+
+    /* ── PAGINATION ── */
+    .pagination {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .pagination a,
+    .pagination span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      font-size: 14px;
+      border-radius: 6px;
+      text-decoration: none;
+      border: 1px solid #e0e0e0;
+      color: #333;
+      background: #fff;
+    }
+
+    .pagination a:hover { background: #f5f5f5; }
+
+    /* SC 1.4.1: current page shown by colour only */
+    .pagination span.current {
+      color: #2563eb;
+      border-color: #2563eb;
+      background: #fff;
+      /* no bold, no background fill, no underline */
+    }
+
+    /* SC 2.4.6: arrow links — no aria-label, no visible text */
+    .pagination a.arrow {
+      color: #555;
+      font-size: 16px;
+    }
+
+    /* ── BUG LIST ── */
+    .bug-list {
+      margin-top: 36px;
+      border-top: 0.5px solid #e8e8e8;
+      padding-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .bug {
+      font-size: 12px;
+      color: #888;
+      line-height: 1.6;
+    }
+
+    .sc {
+      font-weight: 500;
+      color: #b94a1a;
+      margin-right: 4px;
+    }
+
+    /* skip link */
+    .skip-link {
+      position: absolute;
+      top: -100px;
+      left: 10px;
+      background: #000;
+      color: #fff;
+      padding: 10px;
+      z-index: 100;
+      text-decoration: none;
+    }
+    .skip-link:focus { top: 0; }
+  </style>
+</head>
+<body>
+
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <main id="main-content" class="page-body">
+
+    <h1>Accessibility Demo: Pagination</h1>
+    <p class="page-intro">This pagination component contains intentional accessibility failures. Use a screen reader or keyboard to explore them.</p>
+
+    <!-- Article list -->
+    <div class="articles">
+      <div class="article-item">
+        <p class="article-meta">Design · 5 min read</p>
+        <p class="article-title">How to build accessible components</p>
+        <p class="article-excerpt">A deep dive into ARIA patterns, keyboard navigation, and focus management.</p>
+      </div>
+      <div class="article-item">
+        <p class="article-meta">Engineering · 8 min read</p>
+        <p class="article-title">Understanding the accessibility tree</p>
+        <p class="article-excerpt">What browsers expose to assistive technologies and why it matters.</p>
+      </div>
+      <div class="article-item">
+        <p class="article-meta">Research · 4 min read</p>
+        <p class="article-title">Screen reader user survey 2024</p>
+        <p class="article-excerpt">Key findings from the annual survey of assistive technology users worldwide.</p>
+      </div>
+      <div class="article-item">
+        <p class="article-meta">Product · 6 min read</p>
+        <p class="article-title">Writing meaningful alt text</p>
+        <p class="article-excerpt">Practical guidelines for describing images in ways that work for everyone.</p>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <!-- SC 2.4.4: link text is just "1", "2", "3" — no context for screen readers -->
+    <!-- SC 2.4.6: arrow links have no accessible name -->
+    <!-- SC 1.3.1: current page has no aria-current -->
+    <!-- SC 1.4.1: current page shown by colour only -->
+    <nav>
+      <div class="pagination">
+
+        <!-- SC 2.4.6: no aria-label, no visible text -->
+        <a href="#" class="arrow">←</a>
+
+        <a href="#">1</a>
+
+        <!-- SC 1.3.1: no aria-current="page" -->
+        <!-- SC 1.4.1: colour only -->
+        <span class="current">2</span>
+
+        <a href="#">3</a>
+        <a href="#">4</a>
+        <a href="#">5</a>
+
+        <!-- SC 2.4.6: no aria-label, no visible text -->
+        <a href="#" class="arrow">→</a>
+
+      </div>
+    </nav>
+
+    <div class="bug-list">
+      <p class="bug"><span class="sc">SC 2.4.4</span> Pagination links use bare numbers ("1", "2", "3") as link text — screen readers announce them without context. Adding "Page 1", "Page 2" via <code>aria-label</code> or visually hidden text would fix this.</p>
+      <p class="bug"><span class="sc">SC 2.4.6</span> Arrow links ← and → have no accessible name. A screen reader announces them as "link" only, with no indication of purpose.</p>
+      <p class="bug"><span class="sc">SC 1.3.1</span> The current page ("2") has no <code>aria-current="page"</code> — screen readers cannot identify it as the current page.</p>
+      <p class="bug"><span class="sc">SC 1.4.1</span> The current page number is distinguished by colour only — no bold, background fill, or other non-colour indicator is used.</p>
+    </div>
+
+  </main>
+
+</body>
+</html>
