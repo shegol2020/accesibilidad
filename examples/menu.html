@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Accessibility Demo: Navigation</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: sans-serif;
+      line-height: 1.6;
+      background: #fff;
+      color: #111;
+    }
+
+    /* ── NAV ── */
+
+    /* SC 1.3.1: <div> instead of <header> */
+    .site-nav {
+      background: #f8f8f6;
+      border-bottom: 1px solid #e4e4e0;
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-logo {
+      font-size: 16px;
+      font-weight: 500;
+      color: #111;
+      text-decoration: none;
+      padding: 16px 24px 16px 0;
+      margin-right: 8px;
+      border-right: 1px solid #ddd;
+      white-space: nowrap;
+    }
+
+    /* SC 1.3.1: plain <div> instead of <nav> + <ul> */
+    .nav-links {
+      display: flex;
+      align-items: stretch;
+      flex: 1;
+    }
+
+    .nav-links a,
+    .nav-links button.nav-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 0 16px;
+      height: 52px;
+      font-size: 14px;
+      font-family: sans-serif;
+      color: #333;
+      text-decoration: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    /* SC 1.4.1: active = colour only, no underline/bold/icon */
+    .nav-links a.active {
+      color: #2563eb;
+    }
+
+    .nav-links a:hover,
+    .nav-links button.nav-item:hover {
+      color: #000;
+    }
+
+    /* ── DROPDOWN ── */
+    .dropdown { position: relative; }
+
+    /* SC 1.4.11: chevron #bbb on white ≈ 1.6:1 contrast */
+    .chevron {
+      width: 14px;
+      height: 14px;
+      stroke: #bbb;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      flex-shrink: 0;
+    }
+
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: 52px;
+      left: 0;
+      background: #fff;
+      border: 0.5px solid #e0e0e0;
+      border-radius: 8px;
+      min-width: 220px;
+      padding: 8px 0;
+      z-index: 100;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    }
+
+    .dropdown.open .dropdown-menu { display: block; }
+
+    .dropdown-section {
+      border-bottom: 0.5px solid #f0f0f0;
+      padding: 4px 0;
+    }
+    .dropdown-section:last-child { border-bottom: none; }
+
+    /* SC 1.3.1: looks like a heading but is a <div> */
+    .dropdown-heading {
+      font-size: 10px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #aaa;
+      padding: 8px 16px 4px;
+    }
+
+    .dropdown-menu a {
+      display: block;
+      padding: 8px 16px;
+      font-size: 14px;
+      color: #333;
+      text-decoration: none;
+    }
+    .dropdown-menu a:hover { background: #f5f7fa; }
+
+    /* ── NAV RIGHT ── */
+    .nav-right {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-login {
+      padding: 7px 16px;
+      font-size: 13px;
+      font-family: sans-serif;
+      border: 1px solid #ccc;
+      background: transparent;
+      color: #333;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .btn-signup {
+      padding: 7px 16px;
+      font-size: 13px;
+      font-family: sans-serif;
+      border: none;
+      background: #2563eb;
+      color: #fff;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    /* ── PAGE BODY ── */
+    .page-body {
+      padding: 40px 32px;
+      max-width: 900px;
+    }
+
+    h1 {
+      font-size: 24px;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .page-intro {
+      font-size: 14px;
+      color: #444;
+      margin-bottom: 28px;
+      max-width: 600px;
+    }
+
+    /* SC 1.4.1: active filter = colour only */
+    .filters {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+    }
+
+    .filter-btn {
+      padding: 6px 14px;
+      font-size: 13px;
+      font-family: sans-serif;
+      border-radius: 20px;
+      border: 1px solid #ddd;
+      background: #f5f5f5;
+      color: #555;
+      cursor: pointer;
+    }
+
+    .filter-btn.active {
+      color: #2563eb;
+      border-color: #2563eb;
+      background: #f5f5f5;
+      /* no bold, no underline — colour only */
+    }
+
+    /* ── CARDS ── */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .card {
+      background: #fff;
+      border: 0.5px solid #e0e0e0;
+      border-radius: 10px;
+      padding: 20px;
+    }
+
+    .card h3 {
+      font-size: 15px;
+      font-weight: 500;
+      margin-bottom: 6px;
+      color: #111;
+    }
+
+    .card p {
+      font-size: 13px;
+      color: #777;
+    }
+
+    /* ── BUG LIST ── */
+    .bug-list {
+      margin-top: 36px;
+      border-top: 0.5px solid #e8e8e8;
+      padding-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .bug {
+      font-size: 12px;
+      color: #888;
+      line-height: 1.5;
+    }
+
+    .sc {
+      font-weight: 500;
+      color: #b94a1a;
+      margin-right: 4px;
+    }
+
+    /* skip link */
+    .skip-link {
+      position: absolute;
+      top: -100px;
+      left: 10px;
+      background: #000;
+      color: #fff;
+      padding: 10px;
+      z-index: 200;
+      text-decoration: none;
+    }
+    .skip-link:focus { top: 0; }
+  </style>
+</head>
+<body>
+
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- SC 1.3.1: plain <div> instead of <header> -->
+  <div>
+    <div class="site-nav">
+
+      <a href="#" class="nav-logo">Acme</a>
+
+      <!-- SC 1.3.1: <div> instead of <nav> + <ul> -->
+      <div class="nav-links">
+
+        <!-- SC 1.4.1: active via colour only; SC 1.3.1: no aria-current -->
+        <a href="#" class="active">Home</a>
+
+        <!-- SC 2.5.3: visible "Docs" but aria-label is different -->
+        <a href="#" aria-label="Documentation portal and knowledge base">Docs</a>
+
+        <a href="#">Pricing</a>
+
+        <!-- SC 4.1.2: aria-expanded never updates
+             SC 1.4.11: chevron low contrast
+             SC 1.3.1: group headings are <div> not <h2>/<h3> -->
+        <div class="dropdown" id="dd">
+          <button class="nav-item"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                  onclick="toggleDD(event)">
+            Products
+            <svg class="chevron" viewBox="0 0 24 24">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </button>
+
+          <div class="dropdown-menu">
+            <div class="dropdown-section">
+              <!-- SC 1.3.1: <div> looks like heading but isn't -->
+              <div class="dropdown-heading">Platform</div>
+              <a href="#">Analytics</a>
+              <a href="#">Automations</a>
+              <a href="#">Integrations</a>
+            </div>
+            <div class="dropdown-section">
+              <div class="dropdown-heading">Solutions</div>
+              <a href="#">For Startups</a>
+              <a href="#">For Enterprise</a>
+            </div>
+          </div>
+        </div>
+
+        <a href="#">Blog</a>
+
+      </div>
+
+      <div class="nav-right">
+        <button class="btn-login">Log in</button>
+        <button class="btn-signup">Sign up</button>
+      </div>
+
+    </div>
+  </div>
+
+  <main id="main-content" class="page-body">
+
+    <h1>Accessibility Demo: Navigation</h1>
+    <p class="page-intro">This navigation contains intentional accessibility failures. Use a keyboard or screen reader to explore them.</p>
+
+    <!-- SC 1.4.1: active filter = colour only -->
+    <div class="filters">
+      <button class="filter-btn active">All</button>
+      <button class="filter-btn">Design</button>
+      <button class="filter-btn">Engineering</button>
+      <button class="filter-btn">Product</button>
+      <button class="filter-btn">Research</button>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <h3>Getting started</h3>
+        <p>Set up your workspace in minutes.</p>
+      </div>
+      <div class="card">
+        <h3>API reference</h3>
+        <p>Full endpoint documentation.</p>
+      </div>
+      <div class="card">
+        <h3>Component library</h3>
+        <p>Reusable UI building blocks.</p>
+      </div>
+    </div>
+
+    <div class="bug-list">
+      <p class="bug"><span class="sc">SC 1.4.1</span> "Home" active link and "All" filter use colour only — no underline, bold, or additional indicator</p>
+      <p class="bug"><span class="sc">SC 1.3.1</span> Active link has no <code>aria-current="page"</code> attribute</p>
+      <p class="bug"><span class="sc">SC 2.5.3</span> "Docs" visible text does not match its <code>aria-label</code> ("Documentation portal and knowledge base")</p>
+      <p class="bug"><span class="sc">SC 1.3.1</span> Nav links are in a plain <code>&lt;div&gt;</code>, not a <code>&lt;nav&gt;</code> + <code>&lt;ul&gt;</code></p>
+      <p class="bug"><span class="sc">SC 4.1.2</span> "Products" button <code>aria-expanded</code> never updates when dropdown opens or closes</p>
+      <p class="bug"><span class="sc">SC 1.4.11</span> Dropdown chevron stroke is #bbb on white — contrast ratio ≈ 1.6:1 (required: 3:1)</p>
+      <p class="bug"><span class="sc">SC 1.3.1</span> Dropdown group labels ("Platform", "Solutions") are <code>&lt;div&gt;</code> elements, not headings</p>
+    </div>
+
+  </main>
+
+  <script>
+    function toggleDD(e) {
+      e.stopPropagation();
+      document.getElementById('dd').classList.toggle('open');
+      // SC 4.1.2: intentionally NOT updating aria-expanded
+    }
+
+    document.addEventListener('click', function(e) {
+      if (!document.getElementById('dd').contains(e.target)) {
+        document.getElementById('dd').classList.remove('open');
+      }
+    });
+  </script>
+
+</body>
+</html>
