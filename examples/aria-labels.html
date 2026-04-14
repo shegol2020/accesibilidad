@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Accessibility Demo: aria-describedby & aria-labelledby</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: sans-serif;
+      line-height: 1.6;
+      background: #fff;
+      color: #111;
+    }
+
+    .page-body {
+      padding: 40px 32px;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 24px;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .page-intro {
+      font-size: 14px;
+      color: #444;
+      margin-bottom: 36px;
+      max-width: 560px;
+    }
+
+    /* ── LAYOUT ── */
+    .demo-layout {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    /* ── FORM CARD ── */
+    .form-card {
+      background: #fff;
+      border: 0.5px solid #e0e0e0;
+      border-radius: 12px;
+      padding: 28px;
+      flex: 1;
+      max-width: 400px;
+    }
+
+    .form-card h2 {
+      font-size: 16px;
+      font-weight: 500;
+      color: #111;
+      margin-bottom: 20px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 16px;
+    }
+
+    .field label { font-size: 13px; color: #333; }
+
+    .field input {
+      padding: 8px 12px;
+      font-size: 14px;
+      font-family: sans-serif;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      outline: none;
+      color: #111;
+      background: #fff;
+    }
+
+    .field input:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+    }
+
+    .field input[aria-invalid="true"] { border-color: #dc2626; }
+
+    .field-error {
+      font-size: 12px;
+      color: #dc2626;
+      min-height: 16px;
+      display: none;
+    }
+
+    .field-error.visible { display: block; }
+
+    .password-hint {
+      font-size: 12px;
+      color: #888;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 10px;
+      font-size: 14px;
+      font-family: sans-serif;
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 4px;
+    }
+
+    .btn-submit:focus {
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3);
+      outline: none;
+    }
+
+    .success-msg {
+      display: none;
+      font-size: 13px;
+      color: #16a34a;
+      margin-top: 12px;
+    }
+
+    .success-msg.visible { display: block; }
+
+    /* ── HELP BUTTON ── */
+    .help-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid #ccc;
+      background: #f8f8f6;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: #555;
+      flex-shrink: 0;
+      margin-top: 60px;
+    }
+
+    .help-btn:focus {
+      outline: 2px solid #2563eb;
+      outline-offset: 2px;
+    }
+
+    /* Visually hidden — accessible name for the button */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* ── MODAL OVERLAY ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: #fff;
+      border-radius: 12px;
+      padding: 28px;
+      max-width: 400px;
+      width: 90%;
+      position: relative;
+    }
+
+    /* aria-labelledby points to this h2 */
+    .modal h2 {
+      font-size: 17px;
+      font-weight: 500;
+      color: #111;
+      margin-bottom: 12px;
+    }
+
+    .modal p {
+      font-size: 14px;
+      color: #555;
+      line-height: 1.6;
+      margin-bottom: 8px;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: none;
+      border: none;
+      font-size: 18px;
+      color: #888;
+      cursor: pointer;
+      line-height: 1;
+      padding: 4px;
+    }
+
+    .modal-close:focus {
+      outline: 2px solid #2563eb;
+      outline-offset: 2px;
+      border-radius: 4px;
+    }
+
+    .modal-footer { margin-top: 20px; }
+
+    .modal-footer button {
+      padding: 8px 20px;
+      font-size: 14px;
+      font-family: sans-serif;
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .modal-footer button:focus {
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3);
+      outline: none;
+    }
+
+    /* ── NOTES ── */
+    .notes {
+      margin-top: 36px;
+      border-top: 0.5px solid #e8e8e8;
+      padding-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .note {
+      font-size: 12px;
+      color: #888;
+      line-height: 1.6;
+    }
+
+    .note-label {
+      font-weight: 500;
+      color: #2563eb;
+      margin-right: 4px;
+    }
+
+    /* skip link */
+    .skip-link {
+      position: absolute;
+      top: -100px;
+      left: 10px;
+      background: #000;
+      color: #fff;
+      padding: 10px;
+      z-index: 300;
+      text-decoration: none;
+    }
+
+    .skip-link:focus { top: 0; }
+  </style>
+</head>
+<body>
+
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <main id="main-content" class="page-body">
+
+    <h1>Accessibility Demo: aria-describedby &amp; aria-labelledby</h1>
+    <p class="page-intro">Submit the empty form to see inline validation. Click the help button to open a modal. Explore the ARIA patterns used.</p>
+
+    <div class="demo-layout">
+
+      <!-- FORM -->
+      <div class="form-card">
+        <h2>Create account</h2>
+        <form id="demo-form" novalidate>
+
+          <div class="field">
+            <label for="name">Full name</label>
+            <input
+              type="text"
+              id="name"
+              aria-describedby="name-error"
+              autocomplete="name"
+            >
+            <span class="field-error" id="name-error" role="alert">Please enter your full name</span>
+          </div>
+
+          <div class="field">
+            <label for="user-email">Email address</label>
+            <input
+              type="email"
+              id="user-email"
+              aria-describedby="email-error"
+              autocomplete="email"
+            >
+            <span class="field-error" id="email-error" role="alert">Please enter a valid email address</span>
+          </div>
+
+          <div class="field">
+            <label for="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              aria-describedby="password-hint password-error"
+              autocomplete="new-password"
+            >
+            <span class="password-hint" id="password-hint">Must be at least 8 characters</span>
+            <span class="field-error" id="password-error" role="alert">Password must be at least 8 characters</span>
+          </div>
+
+          <button type="submit" class="btn-submit">Create account</button>
+          <p class="success-msg" id="success-msg">Account created successfully!</p>
+
+        </form>
+      </div>
+
+      <!-- HELP BUTTON: accessible name via visually hidden span -->
+      <button class="help-btn" onclick="openModal()" aria-haspopup="dialog">
+        <span class="sr-only">Open help dialog</span>
+        <span aria-hidden="true">?</span>
+      </button>
+
+    </div>
+
+    <!-- MODAL: aria-labelledby points to modal-title -->
+    <div
+      class="modal-overlay"
+      id="modal-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-title"
+    >
+      <div class="modal">
+        <button class="modal-close" onclick="closeModal()" aria-label="Close dialog">&times;</button>
+        <h2 id="modal-title">About this form</h2>
+        <p>This form demonstrates how ARIA attributes improve accessibility for screen reader users.</p>
+        <p><code>aria-describedby</code> links each input to its error message. When a field is invalid, the screen reader announces the error after the field name.</p>
+        <p><code>aria-labelledby</code> on this dialog references the heading above — screen readers announce it when the dialog opens.</p>
+        <div class="modal-footer">
+          <button onclick="closeModal()">Got it</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- NOTES -->
+    <div class="notes">
+      <p class="note"><span class="note-label">aria-describedby</span> Each input references its error message by id. The hint text on the password field is also included — <code>aria-describedby="password-hint password-error"</code> accepts multiple ids.</p>
+      <p class="note"><span class="note-label">aria-labelledby</span> The <code>role="dialog"</code> element references <code>id="modal-title"</code>. When the modal opens, screen readers announce "About this form, dialog".</p>
+      <p class="note"><span class="note-label">Visually hidden name</span> The help button contains <code>&lt;span class="sr-only"&gt;Open help dialog&lt;/span&gt;</code> — visible only to assistive technologies. The <code>?</code> glyph has <code>aria-hidden="true"</code> to prevent it being announced.</p>
+    </div>
+
+  </main>
+
+  <script>
+    const overlay = document.getElementById('modal-overlay');
+    let lastFocus;
+
+    function openModal() {
+      lastFocus = document.activeElement;
+      overlay.classList.add('open');
+      overlay.querySelector('button').focus();
+    }
+
+    function closeModal() {
+      overlay.classList.remove('open');
+      if (lastFocus) lastFocus.focus();
+    }
+
+    // Close on overlay click
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) closeModal();
+    });
+
+    // Close on Escape
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && overlay.classList.contains('open')) closeModal();
+    });
+
+    // Form validation
+    document.getElementById('demo-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      let valid = true;
+
+      const name = document.getElementById('name');
+      const nameErr = document.getElementById('name-error');
+      if (!name.value.trim()) {
+        nameErr.classList.add('visible');
+        name.setAttribute('aria-invalid', 'true');
+        valid = false;
+      } else {
+        nameErr.classList.remove('visible');
+        name.removeAttribute('aria-invalid');
+      }
+
+      const email = document.getElementById('user-email');
+      const emailErr = document.getElementById('email-error');
+      const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value);
+      if (!emailOk) {
+        emailErr.classList.add('visible');
+        email.setAttribute('aria-invalid', 'true');
+        valid = false;
+      } else {
+        emailErr.classList.remove('visible');
+        email.removeAttribute('aria-invalid');
+      }
+
+      const pw = document.getElementById('password');
+      const pwErr = document.getElementById('password-error');
+      if (pw.value.length < 8) {
+        pwErr.classList.add('visible');
+        pw.setAttribute('aria-invalid', 'true');
+        valid = false;
+      } else {
+        pwErr.classList.remove('visible');
+        pw.removeAttribute('aria-invalid');
+      }
+
+      if (valid) {
+        document.getElementById('success-msg').classList.add('visible');
+      }
+    });
+  </script>
+
+</body>
+</html>
