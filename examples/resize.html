@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Accessibility Demo: Reflow</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: sans-serif;
+      background: #f8f8f6;
+      padding: 40px 32px;
+      overflow-x: auto;
+    }
+
+    h1 {
+      font-size: 22px;
+      font-weight: 500;
+      color: #111;
+      margin-bottom: 8px;
+      white-space: nowrap;
+    }
+
+    .page-intro {
+      font-size: 13px;
+      color: #444;
+      margin-bottom: 32px;
+      white-space: nowrap;
+    }
+
+    /* Fixed-width card — does not adapt */
+    .form-card {
+      background: #fff;
+      border: 0.5px solid #e0e0e0;
+      border-radius: 12px;
+      padding: 28px;
+      width: 820px; /* SC 1.4.10: fixed width causes horizontal scroll */
+    }
+
+    .form-card h2 {
+      font-size: 16px;
+      font-weight: 500;
+      color: #111;
+      margin-bottom: 20px;
+      white-space: nowrap;
+    }
+
+    /* Two-column row — does not reflow to single column */
+    .form-row {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .field {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 16px;
+      white-space: nowrap;
+    }
+
+    .field label {
+      font-size: 13px;
+      color: #333;
+      width: 140px; /* fixed label width — clips on small screens */
+      flex-shrink: 0;
+    }
+
+    .field input,
+    .field select {
+      font-size: 11px; /* SC 1.4.4: px units don't scale with browser zoom */
+      font-family: sans-serif;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 7px 10px;
+      outline: none;
+      color: #111;
+      background: #fff;
+      width: 200px; /* fixed input width */
+    }
+
+    .field input::placeholder {
+      color: #767676;
+    }
+
+    .form-row .field {
+      margin-bottom: 0;
+    }
+
+    .section-divider {
+      font-size: 10px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #767676;
+      margin: 20px 0 16px;
+      white-space: nowrap;
+    }
+
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px; /* SC 1.4.4: px units */
+      color: #555;
+      white-space: nowrap;
+      margin-bottom: 12px;
+    }
+
+    /* Fixed-width buttons — SC 1.4.10: don't adapt to viewport */
+    .btn-submit {
+      width: 180px;
+      padding: 10px;
+      font-size: 11px; /* SC 1.4.4: px units */
+      font-family: sans-serif;
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 8px;
+      white-space: nowrap;
+    }
+
+    .btn-secondary {
+      width: 140px;
+      padding: 10px;
+      font-size: 11px; /* SC 1.4.4: px units */
+      font-family: sans-serif;
+      background: #fff;
+      color: #333;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 8px;
+      margin-left: 8px;
+      white-space: nowrap;
+    }
+
+    /* skip link */
+    .skip-link {
+      position: absolute;
+      top: -100px;
+      left: 10px;
+      background: #000;
+      color: #fff;
+      padding: 10px;
+      z-index: 100;
+      text-decoration: none;
+    }
+    .skip-link:focus { top: 0; }
+  </style>
+</head>
+<body>
+
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <main id="main-content">
+
+    <h1>Accessibility Demo: Reflow</h1>
+    <p class="page-intro">Resize the browser window or zoom in to see how this form breaks.</p>
+
+    <!-- SC 1.4.10: fixed-width card causes horizontal scroll below 520px -->
+    <div class="form-card">
+      <h2>Billing information</h2>
+
+      <div class="section-divider">Personal details</div>
+
+      <!-- Two-column row that does not reflow -->
+      <div class="form-row">
+        <div class="field">
+          <label for="first-name">First name</label>
+          <input type="text" id="first-name" placeholder="Jane">
+        </div>
+        <div class="field">
+          <label for="last-name">Last name</label>
+          <input type="text" id="last-name" placeholder="Smith">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="r-email">Email address</label>
+        <input type="email" id="r-email" placeholder="jane@example.com">
+      </div>
+
+      <div class="field">
+        <label for="phone">Phone number</label>
+        <input type="tel" id="phone" placeholder="+1 555 000 0000">
+      </div>
+
+      <div class="section-divider">Billing address</div>
+
+      <div class="field">
+        <label for="address">Street address</label>
+        <input type="text" id="address" placeholder="123 Main Street">
+      </div>
+
+      <div class="form-row">
+        <div class="field">
+          <label for="city">City</label>
+          <input type="text" id="city" placeholder="New York">
+        </div>
+        <div class="field">
+          <label for="zip">ZIP code</label>
+          <input type="text" id="zip" placeholder="10001">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="country">Country</label>
+        <select id="country">
+          <option>United States</option>
+          <option>United Kingdom</option>
+          <option>Germany</option>
+          <option>France</option>
+        </select>
+      </div>
+
+      <div class="section-divider">Preferences</div>
+
+      <div class="checkbox-row">
+        <input type="checkbox" id="newsletter">
+        <label for="newsletter">Subscribe to newsletter and promotional emails</label>
+      </div>
+      <div class="checkbox-row">
+        <input type="checkbox" id="terms">
+        <label for="terms">I agree to the terms and conditions and privacy policy</label>
+      </div>
+
+      <div>
+        <button class="btn-submit">Confirm and pay</button>
+        <button class="btn-secondary">Save for later</button>
+      </div>
+
+    </div>
+
+  </main>
+
+</body>
+</html>
