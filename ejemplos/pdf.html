@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PDF de ejemplo: accesible y no accesible – Curso de accesibilidad</title>
+  <style>
+    :root {
+      --texto: #222;
+      --fondo: #fff;
+      --acento: #5a3410;
+      --enlace: #0b57d0;
+      --borde: #e3cfb8;
+    }
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      font-size: 1.0625rem;
+      line-height: 1.6;
+      color: var(--texto);
+      background: var(--fondo);
+      max-width: 46rem;
+      margin: 0 auto;
+      padding: 2rem 1.25rem;
+    }
+    h1, h2 { color: var(--acento); line-height: 1.25; }
+    h2 { border-bottom: 1px solid var(--borde); padding-bottom: .25rem; margin-top: 2rem; }
+    a { color: var(--enlace); text-underline-offset: .15em; }
+    a:hover { text-decoration-thickness: 2px; }
+    a:focus-visible { outline: 3px solid var(--acento); outline-offset: 2px; border-radius: 2px; }
+    .archivo { border: 1px solid var(--borde); border-radius: 6px; padding: .75rem 1rem; margin: 1rem 0; }
+    .archivo h3 { margin: 0 0 .25rem 0; font-size: 1.1rem; }
+    .archivo p { margin: .25rem 0; }
+    footer { margin-top: 2.5rem; font-size: .9rem; color: #555; border-top: 1px solid #ddd; padding-top: .75rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>PDF de ejemplo para el curso de accesibilidad</h1>
+  </header>
+
+  <main>
+    <p>
+      Dos versiones del mismo documento de una página: ¿Por qué los perros son mejores que los gatos?    
+    </p>
+
+    <h2>Archivos</h2>
+
+    <div class="archivo">
+      <h3>Versión accesible</h3>
+      <p>
+        <a href="pdf/perros_vs_gatos.pdf">Descargar la versión accesible (PDF, 90&nbsp;KB)</a>
+      </p>
+      <p>Etiquetado correcto: título, idioma, encabezados, listas, tabla, imagen decorativa como artefacto e imagen informativa con texto alternativo.</p>
+    </div>
+
+    <div class="archivo">
+      <h3>Versión no accesible</h3>
+      <p>
+        <a href="pdf/perros_vs_gatos_NO_ACCESIBLE.pdf">Descargar la versión no accesible (PDF, 84&nbsp;KB)</a>
+      </p>
+      <p>Mismo contenido con errores intencionados de etiquetado. Tu tarea: encontrarlos.</p>
+    </div>
+
+  </main>
+
+  <footer>
+    <p>Material de formación en accesibilidad digital.</p>
+  </footer>
+</body>
+</html>
