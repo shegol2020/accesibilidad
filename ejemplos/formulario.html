@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Formularios accesibles: errores frecuentes y cómo corregirlos</title>
+<style>
+  :root {
+    --text: #1d1d1f;
+    --muted: #4a4a4f;
+    --bg: #ffffff;
+    --surface: #f5f5f7;
+    --border: #8a8a90;
+    --bad: #a4161a;
+    --bad-bg: #fdf0f0;
+    --good: #1b6b35;
+    --good-bg: #eef7f0;
+    --focus: #1a56db;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--text);
+    background: var(--bg);
+  }
+  a { color: var(--focus); }
+  :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+  .skip {
+    position: absolute; left: 1rem; top: -4rem;
+    background: var(--text); color: #fff; padding: .5rem 1rem; z-index: 10;
+  }
+  .skip:focus { top: 1rem; }
+  header, main, footer { max-width: 1100px; margin: 0 auto; padding: 0 1.25rem; }
+  header { padding-top: 2rem; }
+  h1 { font-size: 1.9rem; line-height: 1.25; margin: 0 0 .75rem; }
+  h2 { font-size: 1.4rem; margin: 0 0 .25rem; }
+  h3 { font-size: 1.1rem; margin: 0 0 .75rem; }
+  .lead { font-size: 1.1rem; color: var(--muted); max-width: 70ch; }
+  .notice {
+    border: 1px solid var(--border); border-radius: 8px;
+    background: var(--surface); padding: .75rem 1rem; max-width: 70ch;
+  }
+  nav ol { columns: 2; column-gap: 2rem; padding-left: 1.25rem; }
+  @media (max-width: 640px) { nav ol { columns: 1; } }
+  section.step { border-top: 1px solid var(--border); padding: 2rem 0; }
+  .crit { font-size: .95rem; color: var(--muted); margin: 0 0 .5rem; }
+  .intro { max-width: 70ch; }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-top: 1rem; }
+  @media (max-width: 760px) { .pair { grid-template-columns: 1fr; } }
+  .ex { border: 1px solid var(--border); border-top-width: 6px; border-radius: 8px; padding: 1rem; }
+  .ex.bad { border-top-color: var(--bad); }
+  .ex.good { border-top-color: var(--good); }
+  .ex > h3 .tag { display: inline-block; padding: 0 .5rem; border-radius: 4px; font-size: .95rem; margin-right: .25rem; }
+  .ex.bad > h3 .tag { background: var(--bad-bg); color: var(--bad); }
+  .ex.good > h3 .tag { background: var(--good-bg); color: var(--good); }
+  .why { font-size: .95rem; margin: 1rem 0 0; padding-top: .75rem; border-top: 1px dashed var(--border); }
+  .demo label, .demo legend { font-weight: 600; }
+  .field { margin: 0 0 1rem; }
+  .field label { display: block; }
+  .demo input[type=text], .demo input[type=email], .demo input[type=tel],
+  .demo input[type=password], .demo select {
+    font: inherit; padding: .45rem .6rem; border: 1px solid #6b6b70; border-radius: 6px;
+    width: 100%; max-width: 22rem; background: #fff; color: var(--text);
+  }
+  .demo input.short { max-width: 6rem; }
+  .demo fieldset { border: 1px solid #6b6b70; border-radius: 6px; margin: 0 0 1rem; padding: .5rem 1rem 1rem; }
+  .row { display: flex; gap: .75rem; flex-wrap: wrap; }
+  .opt { display: flex; align-items: center; gap: .4rem; margin: .25rem 0; font-weight: normal !important; }
+  .opt input { width: 1.2rem; height: 1.2rem; }
+  button {
+    font: inherit; padding: .5rem 1rem; border-radius: 6px; cursor: pointer;
+    border: 2px solid var(--text); background: var(--text); color: #fff; min-height: 44px;
+  }
+  button.secondary { background: #fff; color: var(--text); }
+  .hint { display: block; font-size: .9rem; color: var(--muted); margin: .1rem 0 .25rem; font-weight: normal; }
+  .req-mark { color: var(--bad); }
+  .err-text { display: block; color: var(--bad); font-weight: 600; margin-top: .25rem; }
+  .demo [aria-invalid="true"] { border: 2px solid var(--bad); }
+  .summary { border: 2px solid var(--bad); border-radius: 6px; padding: .75rem 1rem; margin: 0 0 1rem; background: var(--bad-bg); }
+  .summary h4 { margin: 0 0 .25rem; }
+  .status { margin-top: .75rem; font-weight: 600; }
+  .panel { border: 2px solid var(--text); border-radius: 6px; padding: .75rem 1rem; margin-top: .75rem; }
+  .sim-page { border: 2px dashed var(--bad); border-radius: 6px; padding: 1rem; background: var(--bad-bg); }
+  /* Ejemplos incorrectos: estilos con fallos intencionados */
+  .bad-red-label { color: #d32f2f; }
+  .bad-invalid { border: 2px solid #d32f2f !important; }
+  .bad-msg { color: #d32f2f; font-size: .85rem; margin: .25rem 0 0; }
+  .captcha {
+    display: inline-block; font: italic 700 1.8rem Georgia, serif; letter-spacing: .35em;
+    padding: .3rem 1rem; color: #555;
+    background: repeating-linear-gradient(35deg, #ddd 0 4px, #f4f4f4 4px 9px);
+    transform: skew(-12deg); text-decoration: line-through wavy #888; margin: .25rem 0 .75rem;
+    user-select: none;
+  }
+  .captcha span:nth-child(odd) { display: inline-block; transform: rotate(14deg) translateY(4px); }
+  .captcha span:nth-child(even) { display: inline-block; transform: rotate(-11deg); }
+  .hidden { display: none !important; }
+  footer { border-top: 1px solid var(--border); padding: 2rem 1.25rem 3rem; color: var(--muted); }
+</style>
+</head>
+<body>
+<a class="skip" href="#contenido">Saltar al contenido</a>
+
+<header>
+  <h1>Formularios accesibles: errores frecuentes y cómo corregirlos</h1>
+  <p class="lead">Ejemplos didácticos basados en WCAG 2.2, nivel AA. Cada apartado muestra un ejemplo incorrecto y su versión corregida, junto con los criterios de conformidad implicados.</p>
+  <p class="notice"><strong>Importante:</strong> los ejemplos marcados como «Incorrecto» contienen fallos de accesibilidad <strong>intencionados</strong>. Los formularios no envían datos a ningún sitio.</p>
+  <nav aria-labelledby="indice-titulo">
+    <h2 id="indice-titulo">Índice</h2>
+    <ol>
+      <li><a href="#paso-1">Etiquetas visibles</a></li>
+      <li><a href="#paso-2">Grupos de campos</a></li>
+      <li><a href="#paso-3">Requisitos de entrada</a></li>
+      <li><a href="#paso-4">Datos personales</a></li>
+      <li><a href="#paso-5">Mensajes de error</a></li>
+      <li><a href="#paso-6">Cambios de contexto</a></li>
+      <li><a href="#paso-7">Prevención de errores</a></li>
+      <li><a href="#paso-8">Autenticación</a></li>
+      <li><a href="#paso-9">Límites de tiempo</a></li>
+    </ol>
+  </nav>
+</header>
+
+<main id="contenido">
+
+<!-- 1 -->
+<section class="step" id="paso-1" aria-labelledby="t1">
+  <h2 id="t1">1. Etiquetas visibles</h2>
+  <p class="crit">3.3.2 Etiquetas o instrucciones (A) · 1.3.1 Información y relaciones (A) · 2.5.3 Etiqueta en el nombre (A)</p>
+  <p class="intro">Cada campo necesita una etiqueta visible y asociada mediante código. El texto visible debe formar parte del nombre accesible.</p>
+  <div class="pair">
+    <div class="ex bad" role="region" aria-label="Ejemplo incorrecto: etiquetas">
+      <h3><span class="tag">✗ Incorrecto</span></h3>
+      <form class="demo" novalidate>
+<div class="field"><input type="text" placeholder="Nombre"></div>
+<div class="field"><input type="email" placeholder="Correo electrónico"></div>
+<div class="field"><span>Teléfono</span><br><input type="tel" aria-label="Móvil de contacto"></div>
+<button type="submit">Enviar</button>
+      </form>
+      <p class="why"><strong>Problemas:</strong> el marcador de posición desaparece al escribir y no sustituye a la etiqueta. «Teléfono» no está asociado al campo y el nombre accesible («Móvil de contacto») no contiene el texto visible, por lo que el control por voz («pulsa Teléfono») no funciona.</p>
+    </div>
+    <div class="ex good" role="region" aria-label="Ejemplo correcto: etiquetas">
+      <h3><span class="tag">✓ Correcto</span></h3>
+      <form class="demo" novalidate>
+<div class="field"><label for="g1-nombre">Nombre</label><input type="text" id="g1-nombre"></div>
+<div class="field"><label for="g1-email">Correo electrónico</label><input type="email" id="g1-email"></div>
+<div class="field"><label for="g1-tel">Teléfono</label><input type="tel" id="g1-tel"></div>
+<button type="submit">Enviar</button>
+      </form>
+      <p class="why"><strong>Solución:</strong> etiquetas <code>&lt;label for&gt;</code> visibles y permanentes. El nombre accesible coincide con el texto visible.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 2 -->
+<section class="step" id="paso-2" aria-labelledby="t2">
+  <h2 id="t2">2. Grupos de campos</h2>
+  <p class="crit">1.3.1 Información y relaciones (A)</p>
+  <p class="intro">Los botones de opción, las casillas relacionadas y los campos compuestos (por ejemplo, una fecha en tres partes) necesitan un nombre de grupo.</p>
+  <div class="pair">
+    <div class="ex bad" role="region" aria-label="Ejemplo incorrecto: grupos">
+      <h3><span class="tag">✗ Incorrecto</span></h3>
+      <form class="demo" novalidate>
+<p><strong>¿Cómo prefieres que te contactemos?</strong></p>
+<label class="opt"><input type="radio" name="b2-contacto"> Correo</label>
+<label class="opt"><input type="radio" name="b2-contacto"> Teléfono</label>
+<p><strong>Fecha de nacimiento</strong></p>
+<div class="row">
+  <input type="text" class="short" placeholder="DD">
+  <input type="text" class="short" placeholder="MM">
+  <input type="text" class="short" placeholder="AAAA">
+</div>
+      </form>
+      <p class="why"><strong>Problemas:</strong> el lector de pantalla anuncia «Correo, botón de opción» sin la pregunta. Los tres campos de la fecha no tienen nombre propio ni grupo.</p>
+    </div>
+    <div class="ex good" role="region" aria-label="Ejemplo correcto: grupos">
+      <h3><span class="tag">✓ Correcto</span></h3>
+      <form class="demo" novalidate>
+<fieldset>
+  <legend>¿Cómo prefieres que te contactemos?</legend>
+  <label class="opt"><input type="radio" name="g2-contacto"> Correo</label>
+  <label class="opt"><input type="radio" name="g2-contacto"> Teléfono</label>
+</fieldset>
+<fieldset>
+  <legend>Fecha de nacimiento</legend>
+  <div class="row">
+    <div><label for="g2-dia">Día</label><input type="text" id="g2-dia" class="short" inputmode="numeric" autocomplete="bday-day"></div>
+    <div><label for="g2-mes">Mes</label><input type="text" id="g2-mes" class="short" inputmode="numeric" autocomplete="bday-month"></div>
+    <div><label for="g2-anio">Año</label><input type="text" id="g2-anio" class="short" inputmode="numeric" autocomplete="bday-year"></div>
+  </div>
+</fieldset>
+      </form>
+      <p class="why"><strong>Solución:</strong> <code>&lt;fieldset&gt;</code> con <code>&lt;legend&gt;</code>. También vale <code>role="group"</code> con <code>aria-labelledby</code>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 3 -->
+<section class="step" id="paso-3" aria-labelledby="t3">
+  <h2 id="t3">3. Requisitos de entrada</h2>
+  <p class="crit">3.3.2 Etiquetas o instrucciones (A) · 1.4.1 Uso del color (A)</p>
+  <p class="intro">Si un campo es obligatorio o exige un formato, hay que indicarlo antes de que el usuario escriba, y no solo con color.</p>
+  <div class="pair">
+    <div class="ex bad" role="region" aria-label="Ejemplo incorrecto: requisitos">
+      <h3><span class="tag">✗ Incorrecto</span></h3>
+      <form class="demo" novalidate>
+<div class="field"><label for="b3-usuario" class="bad-red-label">Usuario</label><input type="text" id="b3-usuario"></div>
+<div class="field"><label for="b3-alias">Alias</label><input type="text" id="b3-alias"></div>
+<div class="field"><label for="b3-pass" class="bad-red-label">Contraseña</label><input type="password" id="b3-pass"></div>
+<button type="submit">Crear cuenta</button>
+      </form>
+      <p class="why"><strong>Problemas:</strong> los campos obligatorios solo se distinguen por el color rojo. Las reglas de la contraseña no se explican hasta que se produce el error.</p>
+    </div>
+    <div class="ex good" role="region" aria-label="Ejemplo correcto: requisitos">
+      <h3><span class="tag">✓ Correcto</span></h3>
+      <form class="demo" novalidate>
+<p>Los campos marcados con <span class="req-mark" aria-hidden="true">*</span> son obligatorios.</p>
+<div class="field"><label for="g3-usuario">Usuario <span class="req-mark" aria-hidden="true">*</span></label><input type="text" id="g3-usuario" required aria-required="true"></div>
+<div class="field"><label for="g3-alias">Alias (opcional)</label><input type="text" id="g3-alias"></div>
+<div class="field">
+  <label for="g3-pass">Contraseña <span class="req-mark" aria-hidden="true">*</span></label>
+  <span class="hint" id="g3-pass-hint">Mínimo 12 caracteres.</span>
+  <input type="password" id="g3-pass" required aria-required="true" aria-describedby="g3-pass-hint" autocomplete="new-password">
+</div>
+<button type="submit">Crear cuenta</button>
+      </form>
+      <p class="why"><strong>Solución:</strong> nota explicativa del asterisco, atributo <code>required</code> y requisitos de formato visibles junto al campo y vinculados con <code>aria-describedby</code>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 4 -->
+<section class="step" id="paso-4" aria-labelledby="t4">
+  <h2 id="t4">4. Datos personales</h2>
+  <p class="crit">1.3.5 Identificar el propósito de la entrada (AA)</p>
+  <p class="intro">Los campos que piden datos sobre el propio usuario deben llevar el valor de <code>autocomplete</code> correspondiente. Así el navegador puede rellenarlos y las tecnologías de apoyo pueden identificar su propósito.</p>
+  <div class="pair">
+    <div class="ex bad" role="region" aria-label="Ejemplo incorrecto: datos personales">
+      <h3><span class="tag">✗ Incorrecto</span></h3>
+      <form class="demo" novalidate>
+<div class="field"><label for="b4-nombre">Nombre</label><input type="text" id="b4-nombre" autocomplete="off"></div>
+<div class="field"><label for="b4-apellidos">Apellidos</label><input type="text" id="b4-apellidos" autocomplete="off"></div>
+<div class="field"><label for="b4-tel">Teléfono</label><input type="text" id="b4-tel" autocomplete="off"></div>
+<button type="submit">Continuar</button>
+      </form>
+      <p class="why"><strong>Problema:</strong> con <code>autocomplete="off"</code> el propósito de los campos no se expone mediante código y el navegador no permite rellenarlos automáticamente. Lo mismo ocurre si falta el atributo.</p>
+    </div>
+    <div class="ex good" role="region" aria-label="Ejemplo correcto: datos personales">
+      <h3><span class="tag">✓ Correcto</span></h3>
+      <form class="demo" novalidate>
+<div class="field"><label for="g4-nombre">Nombre</label><input type="text" id="g4-nombre" autocomplete="given-name"></div>
+<div class="field"><label for="g4-apellidos">Apellidos</label><input type="text" id="g4-apellidos" autocomplete="family-name"></div>
+<div class="field"><label for="g4-tel">Teléfono</label><input type="tel" id="g4-tel" autocomplete="tel"></div>
+<button type="submit">Continuar</button>
+      </form>
+      <p class="why"><strong>Solución:</strong> <code>given-name</code> para el nombre, <code>family-name</code> para los apellidos y <code>tel</code> para el teléfono completo, con prefijo internacional. Son valores de la <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Attributes/autocomplete">lista documentada en MDN</a>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 5 -->
+<section class="step" id="paso-5" aria-labelledby="t5">
+  <h2 id="t5">5. Mensajes de error</h2>
+  <p class="crit">3.3.1 Identificación de errores (A) · 3.3.3 Sugerencias ante errores (AA) · 4.1.3 Mensajes de estado (AA)</p>
+  <p class="intro">Pulsa «Enviar» con los campos vacíos o con datos incorrectos para comparar ambas versiones, también con un lector de pantalla.</p>
+  <div class="pair">
+    <div class="ex bad" role="region" aria-label="Ejemplo incorrecto: errores">
+      <h3><span class="tag">✗ Incorrecto</span></h3>
+      <form class="demo" id="b5-form" novalidate>
+<div class="field"><label for="b5-email">Correo electrónico</label><input type="email" id="b5-email"></div>
+<div class="field"><label for="b5-cp">Código postal</label><input type="text" id="b5-cp" class="short"></div>
+<p class="bad-msg hidden" id="b5-msg">Error en el formulario</p>
+<button type="submit">Enviar</button>
+      </form>
+      <p class="why"><strong>Problemas:</strong> los errores se marcan solo con un borde rojo. El mensaje genérico no dice qué campo falla ni cómo corregirlo, y el lector de pantalla no lo anuncia.</p>
+    </div>
+    <div class="ex good" role="region" aria-label="Ejemplo correcto: errores">
+      <h3><span class="tag">✓ Correcto</span></h3>
+      <form class="demo" id="g5-form" novalidate>
+<div class="summary hidden" id="g5-summary" tabindex="-1" aria-labelledby="g5-summary-title">
+  <h4 id="g5-summary-title"></h4>
+  <ul id="g5-summary-list"></ul>
+</div>
+<div class="field">
+  <label for="g5-email">Correo electrónico</label>
+  <span class="hint" id="g5-email-hint">Por ejemplo: nombre@dominio.es</span>
+  <input type="email" id="g5-email" autocomplete="email" aria-describedby="g5-email-hint">
+  <span class="err-text hidden" id="g5-email-err"></span>
+</div>
+<div class="field">
+  <label for="g5-cp">Código postal</label>
+  <span class="hint" id="g5-cp-hint">5 cifras</span>
+  <input type="text" id="g5-cp" class="short" inputmode="numeric" autocomplete="postal-code" aria-describedby="g5-cp-hint">
+  <span class="err-text hidden" id="g5-cp-err"></span>
+</div>
+<button type="submit">Enviar</button>
+<p class="status" id="g5-status" role="status"></p>
+      </form>
+      <p class="why"><strong>Solución:</strong> resumen de errores con enlaces a cada campo, que recibe el foco al enviar. Mensaje de texto junto a cada campo, vinculado con <code>aria-describedby</code>, y <code>aria-invalid="true"</code>. El mensaje explica cómo corregir el error, y el envío correcto se comunica con <code>role="status"</code>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 6 -->
+<section class="step" id="paso-6" aria-labelledby="t6">
+  <h2 id="t6">6. Cambios de contexto</h2>
+  <p class="crit">3.2.2 Al recibir entradas (A)</p>
+  <p class="intro">Elegir una opción no debe enviar el formulario ni cambiar de página sin aviso. Prueba a recorrer las opciones de la lista con las flechas del teclado.</p>
+  <div class="pair">
+    <div class="ex bad" role="region" aria-label="Ejemplo incorrecto: cambio de contexto">
+      <h3><span class="tag">✗ Incorrecto</span></h3>
+      <form class="demo" id="b6-form" novalidate>
+<div class="field">
+  <label for="b6-idioma">Idioma del sitio</label>
+  <select id="b6-idioma">
+    <option>Español</option>
+    <option>English</option>
+    <option>Català</option>
+    <option>Euskara</option>
+  </select>
+</div>
+      </form>
+      <div class="sim-page hidden" id="b6-page" tabindex="-1">
+        <p><strong>Simulación:</strong> el sitio ha cargado otra página en «<span id="b6-sel"></span>» sin avisar. Si estabas recorriendo la lista con el teclado, no llegaste a la opción que buscabas.</p>
+        <button type="button" class="secondary" id="b6-back">Volver al ejemplo</button>
+      </div>
+      <p class="why"><strong>Problema:</strong> el cambio de idioma se ejecuta en el evento <code>change</code>. En muchos navegadores, moverse con las flechas ya dispara el cambio.</p>
+    </div>
+    <div class="ex good" role="region" aria-label="Ejemplo correcto: cambio de contexto">
+      <h3><span class="tag">✓ Correcto</span></h3>
+      <form class="demo" id="g6-form" novalidate>
+<div class="field">
+  <label for="g6-idioma">Idioma del sitio</label>
+  <select id="g6-idioma">
+    <option>Español</option>
+    <option>English</option>
+    <option>Català</option>
+    <option>Euskara</option>
+  </select>
+</div>
+<button type="submit">Cambiar idioma</button>
+<p class="status" id="g6-status" role="status"></p>
+      </form>
+      <p class="why"><strong>Solución:</strong> el cambio solo se aplica al pulsar un botón explícito. Otra opción es avisar antes del control de que el cambio es inmediato.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 7 -->
+<section class="step" id="paso-7" aria-labelledby="t7">
+  <h2 id="t7">7. Prevención de errores</h2>
+  <p class="crit">3.3.4 Prevención de errores (legales, financieros, datos) (AA)</p>
+  <p class="intro">Las acciones con consecuencias legales o económicas, o que borran o modifican datos, deben poder anularse, revisarse o confirmarse.</p>
+  <div class="pair">
+    <div class="ex bad" role="region" aria-label="Ejemplo incorrecto: prevención de errores">
+      <h3><span class="tag">✗ Incorrecto</span></h3>
+      <div class="demo">
+<button type="button" id="b7-del">Eliminar mi cuenta</button>
+<p class="status" id="b7-status" role="status"></p>
+      </div>
+      <p class="why"><strong>Problema:</strong> un solo clic, o una pulsación accidental, elimina la cuenta sin confirmación ni posibilidad de deshacer.</p>
+    </div>
+    <div class="ex good" role="region" aria-label="Ejemplo correcto: prevención de errores">
+      <h3><span class="tag">✓ Correcto</span></h3>
+      <div class="demo">
+<button type="button" id="g7-del" aria-expanded="false" aria-controls="g7-panel">Eliminar mi cuenta</button>
+<div class="panel hidden" id="g7-panel">
+  <h4 id="g7-title" tabindex="-1">¿Seguro que quieres eliminar tu cuenta?</h4>
+  <p>Podrás recuperarla durante 30 días. Después se borrarán todos tus datos.</p>
+  <div class="row">
+    <button type="button" id="g7-ok">Sí, eliminar</button>
+    <button type="button" class="secondary" id="g7-cancel">Cancelar</button>
+  </div>
+</div>
+<p class="status" id="g7-status" role="status"></p>
+      </div>
+      <p class="why"><strong>Solución:</strong> paso de confirmación con la consecuencia explicada, opción de cancelar y plazo para deshacer la acción.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 8 -->
+<section class="step" id="paso-8" aria-labelledby="t8">
+  <h2 id="t8">8. Autenticación</h2>
+  <p class="crit">3.3.8 Autenticación accesible (mínima) (AA, nuevo en WCAG 2.2)</p>
+  <p class="intro">El inicio de sesión no puede exigir una prueba cognitiva, como recordar o transcribir caracteres, sin ofrecer una alternativa o un mecanismo de ayuda.</p>
+  <div class="pair">
+    <div class="ex bad" role="region" aria-label="Ejemplo incorrecto: autenticación">
+      <h3><span class="tag">✗ Incorrecto</span></h3>
+      <form class="demo" id="b8-form" novalidate autocomplete="off">
+<div class="field"><label for="b8-user">Usuario</label><input type="text" id="b8-user" autocomplete="off"></div>
+<div class="field"><label for="b8-pass">Contraseña</label><input type="password" id="b8-pass" autocomplete="off"></div>
+<p><strong>Escribe los caracteres de la imagen</strong></p>
+<div class="captcha"><span>k</span><span>7</span><span>F</span><span>q</span><span>2</span></div>
+<div class="field"><input type="text" id="b8-cap" aria-label="Código de verificación"></div>
+<button type="submit">Entrar</button>
+<p class="status" id="b8-status" role="status"></p>
+      </form>
+      <p class="why"><strong>Problemas:</strong> se bloquea pegar la contraseña (prueba a pegar algo) y se desactiva el gestor de contraseñas. El CAPTCHA exige transcribir caracteres distorsionados, sin alternativa.</p>
+    </div>
+    <div class="ex good" role="region" aria-label="Ejemplo correcto: autenticación">
+      <h3><span class="tag">✓ Correcto</span></h3>
+      <form class="demo" novalidate>
+<div class="field"><label for="g8-user">Usuario o correo electrónico</label><input type="text" id="g8-user" autocomplete="username"></div>
+<div class="field">
+  <label for="g8-pass">Contraseña</label>
+  <input type="password" id="g8-pass" autocomplete="current-password">
+  <button type="button" class="secondary" id="g8-toggle" aria-pressed="false" style="margin-top:.5rem">Mostrar contraseña</button>
+</div>
+<button type="submit">Entrar</button>
+<p><a href="#paso-8">Recibir un enlace de acceso por correo</a></p>
+      </form>
+      <p class="why"><strong>Solución:</strong> se permite pegar y el gestor de contraseñas funciona (<code>autocomplete="username"</code> y <code>"current-password"</code>), se puede mostrar la contraseña y existe un acceso alternativo sin contraseña. Nota: en el nivel AA se admiten CAPTCHA de reconocimiento de objetos.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 9 -->
+<section class="step" id="paso-9" aria-labelledby="t9">
+  <h2 id="t9">9. Límites de tiempo</h2>
+  <p class="crit">2.2.1 Tiempo ajustable (A)</p>
+  <p class="intro">Si la sesión caduca, el usuario debe poder desactivar, ajustar o ampliar el tiempo. Pulsa «Iniciar simulación» y escribe algo en el campo. Los tiempos están acortados para la demostración.</p>
+  <div class="pair">
+    <div class="ex bad" role="region" aria-label="Ejemplo incorrecto: límite de tiempo">
+      <h3><span class="tag">✗ Incorrecto</span></h3>
+      <form class="demo" id="b9-form" novalidate>
+<div class="field"><label for="b9-msg">Mensaje</label><input type="text" id="b9-msg"></div>
+<button type="button" class="secondary" id="b9-start">Iniciar simulación (15 s)</button>
+<p class="status" id="b9-status"></p>
+      </form>
+      <p class="why"><strong>Problema:</strong> a los 15 segundos la sesión caduca sin aviso y se borra lo escrito.</p>
+    </div>
+    <div class="ex good" role="region" aria-label="Ejemplo correcto: límite de tiempo">
+      <h3><span class="tag">✓ Correcto</span></h3>
+      <form class="demo" id="g9-form" novalidate>
+<div class="field"><label for="g9-msg">Mensaje</label><input type="text" id="g9-msg"></div>
+<button type="button" class="secondary" id="g9-start">Iniciar simulación (15 s)</button>
+<div class="panel hidden" id="g9-warn">
+  <p role="alert" id="g9-alert"></p>
+  <p aria-hidden="true">Tiempo restante: <span id="g9-count">20</span> s</p>
+  <button type="button" id="g9-extend">Ampliar 20 minutos</button>
+</div>
+<p class="status" id="g9-status" role="status"></p>
+      </form>
+      <p class="why"><strong>Solución:</strong> aviso antes de que caduque la sesión, con un botón para ampliar el tiempo con una sola acción. El aviso es accesible para lectores de pantalla y lo escrito no se pierde.</p>
+    </div>
+  </div>
+</section>
+
+<section class="step" id="siempre" aria-labelledby="t10">
+  <h2 id="t10">Además, en cualquier formulario</h2>
+  <p class="intro">El formulario se evalúa igual que el resto de la interfaz: por ejemplo, teclado (2.1.1), orden del foco (2.4.3), foco visible (2.4.7), foco no oculto (2.4.11), nombre, función y valor de los controles personalizados (4.1.2), contraste del texto (1.4.3) y de los bordes de los campos (1.4.11), tamaño de los objetivos (2.5.8), reajuste (1.4.10), etc.</p>
+</section>
+
+</main>
+
+<footer>
+  <p>Referencias: <a href="https://www.w3.org/TR/WCAG22/">WCAG 2.2</a> · <a href="https://www.w3.org/WAI/WCAG22/Understanding/">Understanding WCAG 2.2</a> · <a href="https://www.w3.org/WAI/tutorials/forms/">Tutorial de formularios del W3C WAI</a> · <a href="https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill">Valores de autocomplete (HTML)</a></p>
+  <p>Los criterios 2.4.11, 2.5.8 y 3.3.8 son nuevos en WCAG 2.2. En auditorías según WCAG 2.1 o EN 301 549 V3.2.1 tienen carácter de recomendación.</p>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+  var $ = function (id) { return document.getElementById(id); };
+
+  // Los formularios de demostración no se envían
+  document.querySelectorAll('form.demo').forEach(function (f) {
+    f.addEventListener('submit', function (e) { e.preventDefault(); });
+  });
+
+  // 5: validación
+  function emailOk(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+  function cpOk(v) { return /^\d{5}$/.test(v); }
+
+  $('b5-form').addEventListener('submit', function () {
+    var e = $('b5-email'), c = $('b5-cp');
+    var badE = !emailOk(e.value.trim()), badC = !cpOk(c.value.trim());
+    e.classList.toggle('bad-invalid', badE);
+    c.classList.toggle('bad-invalid', badC);
+    $('b5-msg').classList.toggle('hidden', !(badE || badC));
+  });
+
+  function setErr(id, msg) {
+    var input = $(id), err = $(id + '-err'), hint = id + '-hint';
+    if (msg) {
+      err.textContent = msg;
+      err.classList.remove('hidden');
+      input.setAttribute('aria-invalid', 'true');
+      input.setAttribute('aria-describedby', hint + ' ' + id + '-err');
+    } else {
+      err.textContent = '';
+      err.classList.add('hidden');
+      input.removeAttribute('aria-invalid');
+      input.setAttribute('aria-describedby', hint);
+    }
+  }
+
+  $('g5-form').addEventListener('submit', function () {
+    var errors = [];
+    var ev = $('g5-email').value.trim(), cv = $('g5-cp').value.trim();
+    var eMsg = !ev ? 'Introduce tu correo electrónico.' :
+      (!emailOk(ev) ? 'El correo debe tener el formato nombre@dominio.es.' : '');
+    var cMsg = !cv ? 'Introduce tu código postal.' :
+      (!cpOk(cv) ? 'El código postal debe tener 5 cifras, por ejemplo 29001.' : '');
+    setErr('g5-email', eMsg);
+    setErr('g5-cp', cMsg);
+    if (eMsg) errors.push(['g5-email', 'Correo electrónico: ' + eMsg]);
+    if (cMsg) errors.push(['g5-cp', 'Código postal: ' + cMsg]);
+
+    var sum = $('g5-summary'), list = $('g5-summary-list');
+    list.innerHTML = '';
+    $('g5-status').textContent = '';
+    if (errors.length) {
+      $('g5-summary-title').textContent = errors.length === 1 ?
+        'Hay 1 error en el formulario' : 'Hay ' + errors.length + ' errores en el formulario';
+      errors.forEach(function (er) {
+        var li = document.createElement('li');
+        var a = document.createElement('a');
+        a.href = '#' + er[0];
+        a.textContent = er[1];
+        a.addEventListener('click', function (ev2) { ev2.preventDefault(); $(er[0]).focus(); });
+        li.appendChild(a);
+        list.appendChild(li);
+      });
+      sum.classList.remove('hidden');
+      sum.focus();
+    } else {
+      sum.classList.add('hidden');
+      $('g5-status').textContent = 'Formulario enviado correctamente (simulación).';
+    }
+  });
+
+  // 6: cambio de contexto
+  $('b6-idioma').addEventListener('change', function () {
+    $('b6-sel').textContent = this.value;
+    $('b6-form').classList.add('hidden');
+    $('b6-page').classList.remove('hidden');
+    $('b6-page').focus();
+  });
+  $('b6-back').addEventListener('click', function () {
+    $('b6-page').classList.add('hidden');
+    $('b6-form').classList.remove('hidden');
+    $('b6-idioma').selectedIndex = 0;
+    $('b6-idioma').focus();
+  });
+  $('g6-form').addEventListener('submit', function () {
+    $('g6-status').textContent = 'Simulación: se cargaría el sitio en «' + $('g6-idioma').value + '».';
+  });
+
+  // 7: prevención de errores
+  $('b7-del').addEventListener('click', function () {
+    $('b7-status').textContent = 'Cuenta eliminada (simulación). No se puede deshacer.';
+  });
+  function closeG7() {
+    $('g7-panel').classList.add('hidden');
+    $('g7-del').setAttribute('aria-expanded', 'false');
+  }
+  $('g7-del').addEventListener('click', function () {
+    $('g7-status').textContent = '';
+    $('g7-panel').classList.remove('hidden');
+    this.setAttribute('aria-expanded', 'true');
+    $('g7-title').focus();
+  });
+  $('g7-cancel').addEventListener('click', function () {
+    closeG7();
+    $('g7-del').focus();
+  });
+  $('g7-ok').addEventListener('click', function () {
+    closeG7();
+    $('g7-status').textContent = 'Cuenta desactivada (simulación). Puedes recuperarla durante 30 días.';
+    $('g7-del').focus();
+  });
+
+  // 8: autenticación
+  $('b8-pass').addEventListener('paste', function (e) { e.preventDefault(); });
+  $('b8-form').addEventListener('submit', function () {
+    $('b8-status').textContent = 'Simulación: el código no es correcto. Inténtalo de nuevo.';
+  });
+  $('g8-toggle').addEventListener('click', function () {
+    var p = $('g8-pass'), on = p.type === 'password';
+    p.type = on ? 'text' : 'password';
+    this.setAttribute('aria-pressed', on ? 'true' : 'false');
+  });
+
+  // 9: límites de tiempo
+  var b9t;
+  $('b9-start').addEventListener('click', function () {
+    clearTimeout(b9t);
+    $('b9-status').textContent = 'Simulación en marcha…';
+    b9t = setTimeout(function () {
+      $('b9-msg').value = '';
+      $('b9-status').textContent = 'Tu sesión ha caducado. Se han perdido los datos.';
+    }, 15000);
+  });
+
+  var g9warnT, g9tick, g9left;
+  function g9reset() { clearTimeout(g9warnT); clearInterval(g9tick); $('g9-warn').classList.add('hidden'); $('g9-alert').textContent = ''; }
+  $('g9-start').addEventListener('click', function () {
+    g9reset();
+    $('g9-status').textContent = 'Simulación en marcha…';
+    g9warnT = setTimeout(function () {
+      g9left = 20;
+      $('g9-count').textContent = g9left;
+      $('g9-warn').classList.remove('hidden');
+      $('g9-alert').textContent = 'Tu sesión caducará en 20 segundos. Puedes ampliar el tiempo sin perder lo que has escrito.';
+      g9tick = setInterval(function () {
+        g9left -= 1;
+        $('g9-count').textContent = g9left;
+        if (g9left <= 0) {
+          g9reset();
+          $('g9-status').textContent = 'Tu sesión ha caducado. Tu mensaje se ha guardado como borrador.';
+        }
+      }, 1000);
+    }, 15000);
+  });
+  $('g9-extend').addEventListener('click', function () {
+    g9reset();
+    $('g9-status').textContent = 'Sesión ampliada 20 minutos.';
+    $('g9-msg').focus();
+  });
+})();
+</script>
+</body>
+</html>
