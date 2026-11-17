@@ -382,42 +382,6 @@
   </div>
 </section>
 
-<!-- 8 -->
-<section class="step" id="paso-8" aria-labelledby="t8">
-  <h2 id="t8">8. Autenticación</h2>
-  <p class="crit">3.3.8 Autenticación accesible (mínima) (AA, nuevo en WCAG 2.2)</p>
-  <p class="intro">El inicio de sesión no puede exigir una prueba cognitiva, como recordar o transcribir caracteres, sin ofrecer una alternativa o un mecanismo de ayuda.</p>
-  <div class="pair">
-    <div class="ex bad" role="region" aria-label="Ejemplo incorrecto: autenticación">
-      <h3><span class="tag">✗ Incorrecto</span></h3>
-      <form class="demo" id="b8-form" novalidate autocomplete="off">
-<div class="field"><label for="b8-user">Usuario</label><input type="text" id="b8-user" autocomplete="off"></div>
-<div class="field"><label for="b8-pass">Contraseña</label><input type="password" id="b8-pass" autocomplete="off"></div>
-<p><strong>Escribe los caracteres de la imagen</strong></p>
-<div class="captcha"><span>k</span><span>7</span><span>F</span><span>q</span><span>2</span></div>
-<div class="field"><input type="text" id="b8-cap" aria-label="Código de verificación"></div>
-<button type="submit">Entrar</button>
-<p class="status" id="b8-status" role="status"></p>
-      </form>
-      <p class="why"><strong>Problemas:</strong> se bloquea pegar la contraseña (prueba a pegar algo) y se desactiva el gestor de contraseñas. El CAPTCHA exige transcribir caracteres distorsionados, sin alternativa.</p>
-    </div>
-    <div class="ex good" role="region" aria-label="Ejemplo correcto: autenticación">
-      <h3><span class="tag">✓ Correcto</span></h3>
-      <form class="demo" novalidate>
-<div class="field"><label for="g8-user">Usuario o correo electrónico</label><input type="text" id="g8-user" autocomplete="username"></div>
-<div class="field">
-  <label for="g8-pass">Contraseña</label>
-  <input type="password" id="g8-pass" autocomplete="current-password">
-  <button type="button" class="secondary" id="g8-toggle" aria-pressed="false" style="margin-top:.5rem">Mostrar contraseña</button>
-</div>
-<button type="submit">Entrar</button>
-<p><a href="#paso-8">Recibir un enlace de acceso por correo</a></p>
-      </form>
-      <p class="why"><strong>Solución:</strong> se permite pegar y el gestor de contraseñas funciona (<code>autocomplete="username"</code> y <code>"current-password"</code>), se puede mostrar la contraseña y existe un acceso alternativo sin contraseña. Nota: en el nivel AA se admiten CAPTCHA de reconocimiento de objetos.</p>
-    </div>
-  </div>
-</section>
-
 <!-- 9 -->
 <section class="step" id="paso-9" aria-labelledby="t9">
   <h2 id="t9">9. Límites de tiempo</h2>
@@ -573,17 +537,6 @@
     closeG7();
     $('g7-status').textContent = 'Cuenta desactivada (simulación). Puedes recuperarla durante 30 días.';
     $('g7-del').focus();
-  });
-
-  // 8: autenticación
-  $('b8-pass').addEventListener('paste', function (e) { e.preventDefault(); });
-  $('b8-form').addEventListener('submit', function () {
-    $('b8-status').textContent = 'Simulación: el código no es correcto. Inténtalo de nuevo.';
-  });
-  $('g8-toggle').addEventListener('click', function () {
-    var p = $('g8-pass'), on = p.type === 'password';
-    p.type = on ? 'text' : 'password';
-    this.setAttribute('aria-pressed', on ? 'true' : 'false');
   });
 
   // 9: límites de tiempo
