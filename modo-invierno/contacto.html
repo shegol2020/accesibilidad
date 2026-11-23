@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contacto – Modo invierno</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/main.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido principal</a>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="logo" href="index.html"><img src="img/logo-final-v2.svg" width="230" height="40"></a>
+
+      <nav class="site-nav" aria-label="Principal">
+        <ul class="nav-list">
+          <li><a href="index.html">Inicio</a></li>
+          <li class="dropdown" data-dropdown>
+            <button type="button" aria-expanded="false" aria-controls="submenu-articulos">
+              Artículos <span aria-hidden="true">▾</span>
+            </button>
+            <ul class="submenu" id="submenu-articulos" hidden>
+              <li><a href="ranking-mantas.html">Gran ranking de mantas para teletrabajar</a></li>
+              <li><a href="bajon-invernal.html">¿Bajón invernal o simplemente lunes?</a></li>
+            </ul>
+          </li>
+          <li><a href="preguntas-frecuentes.html">Preguntas frecuentes</a></li>
+          <li><a href="contacto.html" class="activo">Contacto</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenido" tabindex="-1">
+    <div class="container">
+      <h1>Contacto</h1>
+      <p>Respondemos en 2 días hábiles (o cuando suban las temperaturas).</p>
+      <p>Los campos marcados con * son obligatorios.</p>
+
+      <div class="resumen-errores" id="resumen-errores" tabindex="-1" hidden>
+        <h2></h2>
+        <ul></ul>
+      </div>
+
+      <form class="formulario" id="form-contacto" novalidate>
+        <div class="campo">
+          <label for="nombre">Nombre *</label>
+          <input type="text" id="nombre" name="nombre" required aria-describedby="error-nombre">
+          <p class="error-campo" id="error-nombre" hidden></p>
+        </div>
+
+        <div class="campo">
+          <label>Correo electrónico *</label>
+          <input type="email" id="correo" name="correo" required aria-describedby="pista-correo error-correo">
+          <p class="pista" id="pista-correo">Ejemplo: nombre@ejemplo.com</p>
+          <p class="error-campo" id="error-correo" hidden></p>
+        </div>
+
+        <div class="campo">
+          <label for="mensaje">Mensaje *</label>
+          <textarea id="mensaje" name="mensaje" required aria-describedby="error-mensaje"></textarea>
+          <p class="error-campo" id="error-mensaje" hidden></p>
+        </div>
+
+        <div class="campo campo-check">
+          <label for="privacidad">
+            <input type="checkbox" id="privacidad" name="privacidad" required aria-describedby="error-privacidad">
+            <span>Acepto la política de privacidad *</span>
+          </label>
+          <p class="error-campo" id="error-privacidad" hidden></p>
+        </div>
+
+        <button type="submit" class="boton-enviar">Enviar</button>
+      </form>
+
+      <div class="exito" id="mensaje-exito" hidden>
+        <p>✓ ¡Gracias! Hemos recibido tu mensaje. Prepárate un café y espera.</p>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2026 Modo invierno. Ninguna manta resultó herida.</p>
+    </div>
+  </footer>
+</body>
+</html>
