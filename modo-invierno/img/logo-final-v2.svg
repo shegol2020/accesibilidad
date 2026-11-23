@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 230 40" width="230" height="40">
+  <g transform="translate(20 20)" stroke="#1d4e89" stroke-width="2.5" stroke-linecap="round" fill="none">
+    <g id="rama">
+      <line x1="0" y1="0" x2="0" y2="-15"/>
+      <line x1="0" y1="-9" x2="-4" y2="-13"/>
+      <line x1="0" y1="-9" x2="4" y2="-13"/>
+    </g>
+    <use href="#rama" transform="rotate(60)"/>
+    <use href="#rama" transform="rotate(120)"/>
+    <use href="#rama" transform="rotate(180)"/>
+    <use href="#rama" transform="rotate(240)"/>
+    <use href="#rama" transform="rotate(300)"/>
+  </g>
+  <text x="44" y="27" font-family="system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif" font-size="19" font-weight="800" fill="#1b2a3a" letter-spacing="0.5">MODO INVIERNO</text>
+</svg>

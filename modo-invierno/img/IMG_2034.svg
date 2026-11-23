@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" width="800" height="400">
+  <defs>
+    <pattern id="cuadros" width="40" height="40" patternUnits="userSpaceOnUse">
+      <rect width="40" height="40" fill="#b3122e"/>
+      <rect width="20" height="40" fill="#8f0e25" opacity="0.6"/>
+      <rect width="40" height="20" fill="#8f0e25" opacity="0.6"/>
+    </pattern>
+  </defs>
+
+  <!-- Pared y ventana -->
+  <rect width="800" height="400" fill="#e3edf6"/>
+  <rect x="560" y="40" width="180" height="150" rx="6" fill="#ffe8a3" stroke="#ffffff" stroke-width="10"/>
+  <circle cx="700" cy="80" r="22" fill="#f7b801"/>
+  <line x1="650" y1="40" x2="650" y2="190" stroke="#ffffff" stroke-width="6"/>
+
+  <!-- Mesa -->
+  <rect y="300" width="800" height="100" fill="#c49a6c"/>
+
+  <!-- Teclado -->
+  <rect x="170" y="265" width="420" height="55" rx="10" fill="#3d4a5c"/>
+  <g fill="#5b6b80">
+    <rect x="185" y="278" width="390" height="10" rx="3"/>
+    <rect x="185" y="296" width="390" height="10" rx="3"/>
+  </g>
+
+  <!-- Gato -->
+  <ellipse cx="380" cy="255" rx="150" ry="55" fill="#f2a65a"/>
+  <polygon points="300,175 315,125 345,165" fill="#f2a65a"/>
+  <polygon points="410,165 440,125 455,175" fill="#f2a65a"/>
+  <polygon points="310,168 318,140 336,163" fill="#f7c6a3"/>
+  <polygon points="420,163 438,140 446,168" fill="#f2c6a3"/>
+  <ellipse cx="378" cy="205" rx="85" ry="60" fill="#f2a65a"/>
+  <path d="M335 205 q12 10 24 0" stroke="#1b2a3a" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M397 205 q12 10 24 0" stroke="#1b2a3a" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M372 222 l6 6 l6 -6 z" fill="#c45a6a"/>
+
+  <!-- Manta -->
+  <path d="M160 300 C 170 230, 260 225, 300 240 C 360 262, 420 262, 480 240 C 540 222, 610 240, 620 300 Z" fill="url(#cuadros)"/>
+
+  <!-- Zzz -->
+  <g font-family="system-ui, Arial, sans-serif" font-weight="800" fill="#1d4e89">
+    <text x="470" y="160" font-size="30">z</text>
+    <text x="495" y="130" font-size="38">z</text>
+    <text x="525" y="95" font-size="46">Z</text>
+  </g>
+</svg>
